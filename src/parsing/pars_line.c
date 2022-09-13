@@ -6,11 +6,11 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 16:49:04 by momayaz           #+#    #+#             */
-/*   Updated: 2022/09/13 13:26:56 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/13 15:31:42 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../../cub3d.h"
 
 unsigned int	get_rgb(char *line)
 {

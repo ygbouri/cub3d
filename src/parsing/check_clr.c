@@ -6,11 +6,11 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 21:39:19 by momayaz           #+#    #+#             */
-/*   Updated: 2022/09/13 13:26:56 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/13 15:31:06 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../../cub3d.h"
 
 void	check_charm(t_cub *a, char c)
 {

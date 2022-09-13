@@ -6,11 +6,11 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 16:11:17 by momayaz           #+#    #+#             */
-/*   Updated: 2022/09/13 13:43:22 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/13 15:31:57 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../../cub3d.h"
 
 int	cont_line(char *t)
 {

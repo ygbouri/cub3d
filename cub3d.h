@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/09/13 13:45:15 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/13 19:14:17 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@
 # include <string.h>
 # include <stdio.h>
 # include <stdlib.h>
-
+# define W 1024
+# define H 512
 
 
 typedef struct s_info
@@ -36,14 +37,29 @@ typedef struct s_info
 	unsigned int	cc;
 	unsigned int	fc;
 	int				test[256];
-}					t_info;
+}
+					t_info;
+typedef struct	s_data {
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}				t_data;
 
 typedef struct s_cub
 {
 	char	**map;
+	void	*mlx;
+	void	*mlx_win;
+	int		w;
+	int		h;
+	int		xp;
+	int		yp;
+	char	P;
+	t_data	*img;
 	t_info	info;
 }	t_cub;
-
 
 
 /*************************************************/
@@ -118,43 +134,12 @@ char			*second_part(char *str);
 char			*get_next_line(int fd);
 int				check_colors(char *str);
 void			main_parse(int ac, char **av, t_cub *parsing, int mode);
-
-int				keypress(int keycode, t_key *key);
-int				keyrelease(int keycode, t_key *key);
-void			ft_herewego(t_game *game, t_cub parsing, int bonus);
-void			ft_print(t_raycast *ray, t_win *win, char **map, int bonus);
-
-void			ft_load(t_raycast *ray, void *mlx, t_cub parsing);
-void			ft_init(t_raycast *ray, t_cub parsing, char **map, int bonus);
-
-void			ft_init_key(t_key *key);
-int				ft_nsprite(char **map);
-void			ft_hitdoor(t_raycast *ray, char c);
-void			ft_checkdoor(char **map, float x, float y);
 int				ft_error(char *str);
+/***************************************************************/
 
-unsigned int	getcolor(t_texture *t, int x, int y);
-void			ft_swap(t_pair **sprites, int amount);
-float			ft_abs(float value);
-void			ft_put(t_win *win, unsigned int **buffer);
-
-void			ft_init_v(t_raycast *ray, int x);
-void			ft_init_dist(t_raycast *ray);
-void			ft_wall_col(t_raycast *ray, char **map, int bonus);
-void			ft_side(t_raycast *ray);
-void			ft_init_c(t_raycast *ray, int x, int bonus);
-
-int				ft_sprites(t_raycast *ray, char **map);
-
-int				ft_move(t_game *game);
-
-int				ft_mouse(int x, int y, t_game *game);
-
-int				ft_minimap(t_raycast *ray, t_win *win, char **map);
-
-void			ft_free(t_cub *parsing, t_game *game);
-int				ft_close(void);
-
-void			ft_frame(t_raycast *ray);
+void	ft_display(t_cub *all);
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void	affichminimap(t_cub *all, t_data *img);
+void	pixelcarre(t_cub *all, t_data *img, int color);
 
 #endif

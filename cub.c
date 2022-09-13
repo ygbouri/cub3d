@@ -6,11 +6,11 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 15:57:21 by momayaz           #+#    #+#             */
-/*   Updated: 2022/09/13 13:44:22 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/13 18:23:48 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "cub3d.h"
 
 int	ft_error(char *str)
 {
@@ -104,10 +104,11 @@ int	big_parss(int ac, char *av[], t_cub *all, char c)
 	return (0);
 }
 
-
-int main(int ac, char **av){
-	t_cub all;
+int main(int ac, char **av)
+{
+	t_cub	all;
 
 	big_parss(ac, av, &all, 'm');
-	
+	ft_display(&all);
+	// affichminimap(&all, &img);
 }
