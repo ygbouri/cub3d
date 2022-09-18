@@ -6,12 +6,21 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 16:02:01 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/09/13 19:22:04 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/18 16:10:30 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
 
+int	ft_strleny(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return(i);
+}
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
@@ -76,47 +85,55 @@ int	checkplayer(t_cub *all)
 	return (0);
 }
 
-// void	keyw(t_cub *all)
-// {
-// 	checkplayer(all);
-// 	if (all->map[--all->yp][all->xp] == '0')
-// 	{
-// 		all->map[++all->yp][all->xp] = '0';
-// 		all->map[--all->yp][all->xp] = all->P;
-// 	}
-// }
+void	keyw(t_cub *all)
+{
+	checkplayer(all);
+	if (all->map[--all->yp][all->xp] == '0')
+	{
+		all->map[++all->yp][all->xp] = '0';
+		all->map[--all->yp][all->xp] = all->P;
+	}
+	// if ((all->yp - 10) <= 0)
+	// 	all->yp = 0;
+	// else
+	// 	all->yp -= 10; 
+}
 
-// void	keys(t_cub *all)
-// {
-// 	checkplayer(all);
-// 	if (all->map[++all->yp][all->xp] == '0')
-// 	{
-// 		all->map[--all->yp][all->xp] = '0';
-// 		all->map[++all->yp][all->xp] = all->P;
-// 	}
-// }
+void	keys(t_cub *all)
+{
+	checkplayer(all);
+	if (all->map[++all->yp][all->xp] == '0')
+	{
+		all->map[--all->yp][all->xp] = '0';
+		all->map[++all->yp][all->xp] = all->P;
+	}
+	// if ((all->yp + 10) <= ft_strleny(all->map))
+	// 	all->yp += 10;
+	// else
+	// 	all->yp -= 10; 
+}
 
-// void	keya(t_cub *all)
-// {
-// 	checkplayer(all);
-// 	if (all->map[all->yp][--all->xp] == '0')
-// 	{
-// 		all->map[all->yp][++all->xp] = '0';
-// 		all->map[all->yp][--all->xp] = all->P;
-// 	}
-// }
+void	keya(t_cub *all)
+{
+	checkplayer(all);
+	if (all->map[all->yp][--all->xp] == '0')
+	{
+		all->map[all->yp][++all->xp] = '0';
+		all->map[all->yp][--all->xp] = all->P;
+	}
+}
 
-// void	keyd(t_cub *all)
-// {
-// 	checkplayer(all);
-// 	if (all->map[all->yp][++all->xp] == '0')
-// 	{
-// 		all->map[all->yp][--all->xp] = '0';
-// 		all->map[all->yp][++all->xp] = all->P;
-// 	}
-// }
+void	keyd(t_cub *all)
+{
+	checkplayer(all);
+	if (all->map[all->yp][++all->xp] == '0')
+	{
+		all->map[all->yp][--all->xp] = '0';
+		all->map[all->yp][++all->xp] = all->P;
+	}
+}
 
-int	keyhook(t_cub *all, int key)
+int	keyhook(int key, t_cub *all)
 {
 	if (key == 13)
 		keyw(all);
@@ -127,39 +144,95 @@ int	keyhook(t_cub *all, int key)
 	else if (key == 2)
 		keyd(all);
 	mlx_clear_window(all->mlx, all->mlx_win);
+	all->img->img = mlx_new_image(all->mlx, 512, 256);
+	all->img->addr = mlx_get_data_addr(all->img->img, &(all->img->bits_per_pixel),
+									&(all->img->line_length), &(all->img->endian));
 	affichminimap(all, all->img);
 	return(0);
 }
 
-void	affichminimap(t_cub *all, t_data *img)
+void	checksizexy(t_cub *all, t_data *img)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
 	all->h = 0;
 	all->w = 0;
 	all->img = img;
-	while (all->map[i])
+	all->topy = all->yp + 10;
+	all->topx = all->xp + 10;
+	if (all->topy >= ft_strleny(all->map))
+		all->topy = ft_strleny(all->map) - 1;
+	if (all->i < 0)
+		all->i = 0;
+	if (all->j < 0)
+		all->j = 0;
+	if (all->topx >= (int)ft_strlen(all->map[all->i]))
+		all->topx = ft_strlen(all->map[all->j]);
+}
+void	drawingline(t_cub *all, t_data *img)
+{
+	int		dx;
+	int		dy;
+	int		i;
+	int		x;
+	int		y;
+	double	incx;
+	double	incy;
+	double	step;
+
+	i = 0;
+	checkplayer(all);
+	x = all->xp;
+	y = all->yp;
+	printf("x ===>%d y====>%d\n", x, y);
+	dx = all->xp;
+	dy = (all->yp - 2) + all->yp;
+	if (abs(dx) > abs(dy))
+		step = abs(dx);
+	else
+		step = abs(dy);
+	incx = dx / step;
+	incy = dy / step;
+	while (i < step)
 	{
-		j = 0;
+		printf("dy ====> %d\n", i);
+		my_mlx_pixel_put(img, x, y, 0x00ecf0f1);
+		x += incx;
+		y += incy;
+		i++;
+	}
+}
+void	affichminimap(t_cub *all, t_data *img)
+{
+	checkplayer(all);
+	all->i = all->yp - 10;
+	all->j = all->xp - 10;
+	checksizexy(all, img);
+	while (all->i <= all->topy)
+	{
+		all->j = all->xp - 10;
 		all->w = 0;
-		while (all->map[i][j])
+		if (all->j < 0)
+			all->j = 0;
+		all->topx = all->xp + 10;
+		if (all->topx >= (int)ft_strlen(all->map[all->i]))
+			all->topx = ft_strlen(all->map[all->i]);
+		while (all->j <= all->topx)
 		{
-			if (all->map[i][j] == '1')
+			if (all->map[all->i][all->j] == '1')
 				pixelcarre(all, img, 0x00117864);
-			else if (all->map[i][j] == ' ' || all->map[i][j] == '0')
+			else if (all->map[all->i][all->j] == ' ' || all->map[all->i][all->j] == '0')
 				pixelcarre(all, img, 0x0f39c12);
-			else if (all->map[i][j] != ' ' && all->map[i][j] != '0')
+			else if (all->map[all->i][all->j] != ' ' && all->map[all->i][all->j] != '0')
+			{
 				pixelcarre(all, img, 0x00ecf0f1);
-			j++;
+			}
+			all->j++;
 			all->w += 16;
 		}
-		i++;
+		all->i++;
 		all->h += 16;
 	}
+	drawingline(all, img);
 	mlx_put_image_to_window(all->mlx, all->mlx_win, img->img, 0, 0);
-	mlx_hook(all->mlx_win, 2, 0, keyhook, all);
+	mlx_hook(all->mlx_win, 2, 1L<<0, keyhook, all);
 	mlx_loop(all->mlx);
 }

@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/09/13 19:14:17 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/17 19:16:59 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,12 @@ typedef struct s_cub
 	int		h;
 	int		xp;
 	int		yp;
+	int		topy;
+	int		topx;
+	int		i;
+	int		j;
 	char	P;
+	int		sizemy;
 	t_data	*img;
 	t_info	info;
 }	t_cub;
