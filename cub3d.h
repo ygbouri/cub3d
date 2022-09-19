@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/09/18 17:54:09 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/19 20:51:08 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,28 +47,42 @@ typedef struct	s_data {
 	int		endian;
 }				t_data;
 
-typedef struct s_cub
+typedef struct  player
 {
-	char	**map;
-	void	*mlx;
-	void	*mlx_win;
-	int		w;
-	int		h;
 	int		xp;
 	int		yp;
-	int		topy;
-	int		topx;
-	int		i;
-	int		j;
-	int		pscreenx;
-	int		pscreeny;
-	char	P;
-	int		sizemy;
-	float	dirx;
-	float	diry;
-	float	ang;
-	t_data	*img;
-	t_info	info;
+	int		radius;
+	int		turnDirection;
+	int		walkDirection;
+	float	rotationangl;
+	float	movespeed;
+	float	rotationspeed;
+}				t_player;
+
+typedef struct s_cub
+{
+	char		**map;
+	void		*mlx;
+	void		*mlx_win;
+	int			w;
+	int			h;
+	int			xp;
+	int			yp;
+	int			checker;
+	int			topy;
+	int			topx;
+	int			i;
+	int			j;
+	int			pscreenx;
+	int			pscreeny;
+	char		P;
+	int			sizemy;
+	float		dirx;
+	float		diry;
+	float		ang;
+	t_data		*img;
+	t_info		info;
+	t_player	*p;
 }	t_cub;
 
 

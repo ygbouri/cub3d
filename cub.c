@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 15:57:21 by momayaz           #+#    #+#             */
-/*   Updated: 2022/09/13 18:23:48 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/19 20:34:49 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,9 @@ int main(int ac, char **av)
 {
 	t_cub	all;
 
+	all.checker = 0;
 	big_parss(ac, av, &all, 'm');
 	ft_display(&all);
+
 	// affichminimap(&all, &img);
 }
