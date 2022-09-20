@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/09/19 20:51:08 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/20 19:11:52 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ typedef struct  player
 	int		xp;
 	int		yp;
 	int		radius;
+	int		checker;
 	int		turnDirection;
 	int		walkDirection;
 	float	rotationangl;
@@ -163,7 +164,7 @@ int				ft_error(char *str);
 
 void	ft_display(t_cub *all);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
-void	affichminimap(t_cub *all, t_data *img);
+void	affichminimap(t_cub *all, t_data *img, int ch);
 void	pixelcarre(t_cub *all, t_data *img, int color);
 
 #endif
