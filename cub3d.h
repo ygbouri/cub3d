@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/09/20 19:11:52 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/21 20:40:16 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,36 +54,41 @@ typedef struct  player
 	int		radius;
 	int		checker;
 	int		turnDirection;
-	int		walkDirection;
-	float	rotationangl;
+	int		walkDirectionx;
+	int		walkDirectiony;
+	double	rotationangl;
 	float	movespeed;
+	float	movestep;
 	float	rotationspeed;
 }				t_player;
 
 typedef struct s_cub
 {
-	char		**map;
-	void		*mlx;
-	void		*mlx_win;
-	int			w;
-	int			h;
-	int			xp;
-	int			yp;
-	int			checker;
-	int			topy;
-	int			topx;
-	int			i;
-	int			j;
-	int			pscreenx;
-	int			pscreeny;
-	char		P;
-	int			sizemy;
-	float		dirx;
-	float		diry;
-	float		ang;
-	t_data		*img;
-	t_info		info;
-	t_player	*p;
+	char			**map;
+	void			*mlx;
+	void			*mlx_win;
+	int				w;
+	int				h;
+	double			posx;
+	double			posy;
+	int				xp;
+	int				yp;
+	int				checker;
+	int				topy;
+	int				topx;
+	int				i;
+	int				j;
+	int				k;
+	double			pscreenx;
+	double			pscreeny;
+	char			P;
+	int				sizemy;
+	float			dirx;
+	float			diry;
+	float			ang;
+	t_data			*img;
+	t_info			info;
+	t_player		*p;
 }	t_cub;
 
 
