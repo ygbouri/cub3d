@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/09/21 20:40:16 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/23 13:33:05 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,10 @@ typedef struct s_cub
 	int				k;
 	double			pscreenx;
 	double			pscreeny;
+	int				centerx;
+	int				centery;
+	int				disx;
+	int				disy;
 	char			P;
 	int				sizemy;
 	float			dirx;
