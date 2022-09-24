@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/09/23 13:33:05 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/24 20:43:05 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,14 @@ typedef struct s_cub
 	int				k;
 	double			pscreenx;
 	double			pscreeny;
+	double			translation_x;
+	double			translation_y;
+	double 			minix;
+	double 			miniy;
+	double				disy;
+	double				disx;
 	int				centerx;
 	int				centery;
-	int				disx;
-	int				disy;
 	char			P;
 	int				sizemy;
 	float			dirx;
@@ -174,6 +178,6 @@ int				ft_error(char *str);
 void	ft_display(t_cub *all);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void	affichminimap(t_cub *all, t_data *img, int ch);
-void	pixelcarre(t_cub *all, t_data *img, int color);
+void	pixelcarre(t_cub *all, int pi, t_data *img, int color);
 
 #endif
