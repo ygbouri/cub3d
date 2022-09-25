@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/09/24 20:43:05 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/25 20:54:16 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ typedef struct s_cub
 	char			**map;
 	void			*mlx;
 	void			*mlx_win;
+	t_data			*img;
 	int				w;
 	int				h;
 	double			posx;
@@ -94,7 +95,6 @@ typedef struct s_cub
 	float			dirx;
 	float			diry;
 	float			ang;
-	t_data			*img;
 	t_info			info;
 	t_player		*p;
 }	t_cub;
@@ -177,7 +177,11 @@ int				ft_error(char *str);
 
 void	ft_display(t_cub *all);
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
-void	affichminimap(t_cub *all, t_data *img, int ch);
+void	affichminimap(t_cub *all, int ch);
 void	pixelcarre(t_cub *all, int pi, t_data *img, int color);
+void	raycasting(t_cub *all);
+int keyrelease(int key, t_cub *all);
+int	keypressed(int key, t_cub *all);
+int	moveplayer(t_cub *all);
 
 #endif

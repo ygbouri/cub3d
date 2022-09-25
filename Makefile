@@ -6,7 +6,7 @@
 #    By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 14:45:57 by ygbouri           #+#    #+#              #
-#    Updated: 2022/09/13 16:31:10 by ygbouri          ###   ########.fr        #
+#    Updated: 2022/09/25 20:46:09 by ygbouri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,14 +22,14 @@ NAME = cub3D
 
 MLX = -framework OpenGL -framework Appkit
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror 
 
 HEADER = cub3d.h
 
 all : $(NAME)
 
 $(NAME) : $(OBJ) $(HEADER)
-	@$(CC) $(CFLAGS) $(OBJ) -lmlx $(MLX) -o $(NAME) -g
+	@$(CC) $(CFLAGS) $(SRC) -lmlx $(MLX) -o $(NAME) -g
 	@echo "mandatory is done"
 
 clean :

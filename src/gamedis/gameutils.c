@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 16:02:01 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/09/24 22:54:52 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/25 22:07:00 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,41 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
+	if (x >= 0  && x < W && y >= 0 && y < H)
+	{
+		dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+		*(unsigned int*)dst = color;
+	}
 }
 
+void	drawimg(t_cub *all, int ch)
+{
+	all->img->img = mlx_new_image(all->mlx, W, H);
+	all->img->addr = mlx_get_data_addr(all->img->img, &all->img->bits_per_pixel, &all->img->line_length, &all->img->endian);		
+	if (ch == 0)
+	{
+			affichminimap(all, 0);
+			
+	}
+
+}
 void	ft_display(t_cub *all)
 {
-	t_data	img;
-
+	// t_data	img;
+	all->img = (t_data *)malloc(sizeof(t_data));
 	all->mlx = mlx_init();
 	all->mlx_win = mlx_new_window(all->mlx, W, H, "CUB3D");
-	img.img = mlx_new_image(all->mlx, 128, 128);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel,
-									&img.line_length, &img.endian);
-	affichminimap(all, &img, 0);
+	// all->img->img = mlx_new_image(all->mlx, 128, 128);
+	// all->img->addr = mlx_get_data_addr(all->img->img, &all->img->bits_per_pixel, &all->img->line_length, &all->img->endian);
+	// all->img = &img;
+	
+	drawimg(all, 0);
+	// draw_cieling()
+	mlx_hook(all->mlx_win, 3, 1L<<1, keyrelease, all);
+	mlx_hook(all->mlx_win, 2, 1L<<0, keypressed, all);
+	mlx_loop_hook(all->mlx, moveplayer, all);
+	mlx_loop(all->mlx);					
+	//affichminimap(all, &img, 0);
 }
 
 // void	pixemap(t_cub *all, t_data *img, int color)
@@ -51,7 +72,7 @@ void	pixelcarre(t_cub *all, int pi, t_data *img, int color)
 
 	i = all->miniy;
 	j = all->minix;
-	while (i < all->miniy + pi)// && all->h < 128) 
+	while (i < all->miniy + pi) 
 	{
 		j = all->minix;
 		while (j < all->minix + pi)
@@ -72,7 +93,7 @@ void	pixelmap(t_data *img, int color)
 
 	i = 0;
 	j = 0;
-	while (i < 128)// && all->h < 128) 
+	while (i < 128)
 	{
 		j = 0;
 		while (j < 128)
@@ -82,35 +103,6 @@ void	pixelmap(t_data *img, int color)
 		}
 		i++;
 	}
-}
-void	calculedistance(t_cub *all)
-{
-	// if ((all->pscreenx > all->centerx) && (all->pscreeny > all->centery))
-	// {
-		all->centerx = 128 / 2;
-		all->centery = 128 / 2;
-		all->disx = all->pscreenx - all->centerx;
-		all->disy = all->pscreeny - all->centery;
-		// x cases 
-	// 	if(all->disx == 0)
-	// 		all->translation_x = all->pscreenx;
-	// 	else if(all->disx < 0)
-	// 		all->translation_x = all->pscreenx + fabs(all->disx);
-	// 	else if(all->disx > 0)
-	// 		all->translation_x = all->pscreenx - fabs(all->disx);
-	// 	// y cases 
-	// 	if(all->disy == 0)
-	// 		all->translation_y = all->pscreeny;
-	// 	else if(all->disy < 0)
-	// 		all->translation_y = all->pscreeny + fabs(all->disy);
-	// 	else if(all->disy > 0)
-	// 		all->translation_y = all->pscreeny - fabs(all->disy);
-	// // }
-	// else if ((all->pscreenx < all->centerx) && (all->pscreeny < all->centery))
-	// {
-		// all->disx = all->pscreenx + all->centerx;
-		// all->disy = all->pscreeny + all->centery;
-	// }
 }
 
 int	checkplayer(t_cub *all, int ch)
@@ -133,10 +125,8 @@ int	checkplayer(t_cub *all, int ch)
 					|| all->map[all->yp][all->xp] == 'E')
 				{
 					all->P = all->map[all->yp][all->xp];
-					all->pscreenx = all->w + 6;
-					all->pscreeny = all->h + 6;
-					printf("checplayerx%f checplayery %f\n", all->pscreenx, all->pscreeny);
-					calculedistance(all);
+					all->pscreenx = all->w;
+					all->pscreeny = all->h;
 					return (1);
 				}
 				all->w += 16;
@@ -160,7 +150,7 @@ t_player	*iniatialiserp(t_cub *all)
 	p->movespeed = 2.0;
 	p->movestep = 0.0;
 	p->radius = 0;
-	p->rotationangl = 0.0;
+	p->rotationangl = -1;
 	p->rotationspeed = 2 * (M_PI / 180);
 	checkplayer(all, 0);
 	p->xp = all->xp;
@@ -170,7 +160,6 @@ t_player	*iniatialiserp(t_cub *all)
 
 void	detectang(t_cub *all)
 {
-	//checkplayer(all, 0);
 	if (all->P == 'N')
 		all->p->rotationangl = M_PI_2;
 	else if (all->P == 'S')
@@ -181,7 +170,7 @@ void	detectang(t_cub *all)
 		all->p->rotationangl = M_PI;
 }
 
-void	drawingline(t_cub *all, int ch)
+void	drawingline(t_cub *all)
 {
 	int	dx;
 	int	dy;
@@ -193,11 +182,6 @@ void	drawingline(t_cub *all, int ch)
 	int step;
 
 	i = 0;
-	checkplayer(all, ch);
-	if (ch == 0)
-		detectang(all);
-	all->dirx = all->xp + (cos(all->p->rotationangl) * 30);
-	all->diry = all->yp + (sin(all->p->rotationangl) * 30);
 	dx = all->dirx - all->xp;
 	dy = all->diry - all->yp;
 	if (abs(dx) > abs(dy))
@@ -218,72 +202,128 @@ void	drawingline(t_cub *all, int ch)
 }
  void	paintplayer(t_cub *all, int ch)
 {
-	t_player	*p;
-
-	p = NULL;
 	if(ch == 0)
 	{
-		p = iniatialiserp(all);
-		all->p = p;
+		all->p = iniatialiserp(all);
+		detectang(all);
 	}
 	my_mlx_pixel_put(all->img, 64, 64, 0xFD1700);
-	free(p);
-	drawingline(all, ch);
+	all->dirx = all->xp + (cos(all->p->rotationangl) * 30);
+	all->diry = all->yp + (sin(all->p->rotationangl) * 30);
+	drawingline(all);
+}
+
+int	checkwall(t_cub *all)
+{
+	int	x;
+	int	y;
+	int	x_line;
+
+
+	x = floor(all->posx / 16);
+	y = floor(all->posy / 16);
+	
+	if (y < 0 && y > ft_strleny(all->map))
+		return (0);
+	if (all->map[y] != NULL)
+		x_line = ft_strlen(all->map[y]);
+	else
+		return (0);
+	if (x < 0 && x > x_line)
+		return (0); 
+	// printf("x===>%d y===>%d\n", x, y);
+	if (all->map[y][x] == '1')
+		return (0);
+	return (1);
 }
 
 void	moveleft(t_cub *all)
 {
-	all->posx += sin(all->p->rotationangl) * 4;
-	all->posy -= cos(all->p->rotationangl) * 4;
-	all->pscreenx = all->posx;
-	all->pscreeny = all->posy;
+	all->posx += sin(all->p->rotationangl) * 1;
+	all->posy -= cos(all->p->rotationangl) * 1;
+	if (checkwall(all) == 1)
+	{
+		all->pscreenx = all->posx;
+		all->pscreeny = all->posy;
+	}
 }
 
 void	moveright(t_cub *all)
 {
-	all->posx -= sin(all->p->rotationangl) * 4;
-	all->posy += cos(all->p->rotationangl) * 4;
-	all->pscreenx = all->posx;
-	all->pscreeny = all->posy;
+	all->posx -= sin(all->p->rotationangl) * 1;
+	all->posy += cos(all->p->rotationangl) * 1;
+	if (checkwall(all) == 1)
+	{
+		all->pscreenx = all->posx;
+		all->pscreeny = all->posy;
+	}
 }
 
 void	moveup(t_cub *all)
 {
-	all->posx += cos(all->p->rotationangl) * 4;
-	all->posy += sin(all->p->rotationangl) * 4;
-	all->pscreenx = all->posx;
-	all->pscreeny = all->posy;
+	all->posx += cos(all->p->rotationangl) * 1;
+	all->posy += sin(all->p->rotationangl) * 1;
+	if (checkwall(all) == 1)
+	{
+		all->pscreenx = all->posx;
+		all->pscreeny = all->posy;
+	}
 }
 
 void	movedown(t_cub *all)
 {
-	all->posx -= cos(all->p->rotationangl) * 4;
-	all->posy -= sin(all->p->rotationangl) * 4;
-	all->pscreenx = all->posx;
-	all->pscreeny = all->posy; 
+	all->posx -= cos(all->p->rotationangl) * 1;
+	all->posy -= sin(all->p->rotationangl) * 1;
+	if (checkwall(all) == 1)	
+	{
+		all->pscreenx = all->posx;
+		all->pscreeny = all->posy;
+	}
 }
 
 void	moveraytleft(t_cub *all)
 {
-	all->p->rotationangl += 0.2;
+	all->p->rotationangl += 0.05;
 	if (all->p->rotationangl >= (M_PI * 2))
 		all->p->rotationangl -= 2 * M_PI;
 }
 
 void	moveraytright(t_cub *all)
 {
-	all->p->rotationangl -= 0.2;
+	all->p->rotationangl -= 0.05;
 	if (all->p->rotationangl <= 0)
 		all->p->rotationangl += 2 * M_PI;
 }
 
+void	updat_data(t_cub **all)
+{
+	double step;
+
+	step = (*all)->p->walkDirectiony * 2;
+	(*all)->p->rotationangl += (*all)->p->turnDirection * (4 * M_PI / 180);
+	(*all)->posx += cos((*all)->p->rotationangl) * step;
+	(*all)->posy += sin((*all)->p->rotationangl) * step;
+	if (checkwall(*all) == 1)
+	{
+		(*all)->pscreenx = (*all)->posx;
+		(*all)->pscreeny = (*all)->posy;
+	}
+	step = (*all)->p->walkDirectionx * 2;
+	(*all)->posx -= sin((*all)->p->rotationangl) * step;
+	(*all)->posy += cos((*all)->p->rotationangl) * step;
+	if (checkwall(*all) == 1)
+	{
+		(*all)->pscreenx = (*all)->posx;
+		(*all)->pscreeny = (*all)->posy;
+	}
+}
 int keyrelease(int key, t_cub *all)
 {
 	if (key == 124)
 		all->p->turnDirection = 0;
 	else if (key == 123)
 		all->p->turnDirection = 0;
-	else if (key == 0)
+	if (key == 0)
 		all->p->walkDirectionx = 0;
 	else if (key == 2)
 		all->p->walkDirectionx = 0;
@@ -291,75 +331,59 @@ int keyrelease(int key, t_cub *all)
 		all->p->walkDirectiony = 0;
 	else if (key == 13)
 		all->p->walkDirectiony = 0;
+	// updat_data(all);
+	// mlx_clear_window(all->mlx, all->mlx_win);
+	// mlx_destroy_image(all->mlx, all->img->img);
+	// drawimg(all, 1);
+	// affichminimap(all, 1);
 	return (0);
 }
 
 
-int	moveplayer(t_cub *all)
-{
-	if (all->p->turnDirection == 1)
-		moveraytleft(all);
-	if (all->p->turnDirection == -1)
-		moveraytright(all);
-	if (all->p->walkDirectionx == -1)
-		moveright(all);
-	if (all->p->walkDirectionx == 1)
-		moveleft(all);
-	if (all->p->walkDirectiony == 1)
-		moveup(all);
-	if (all->p->walkDirectiony == -1)
-		movedown(all);
-	// if (all->p->turnDirection != 0 || all->p->walkDirectionx != 0 || all->p->walkDirectiony == 0)
-	// {
-	// 	mlx_clear_window(all->mlx, all->mlx_win);
-	// 	affichminimap(all, all->img, 1);
-	// }
-	return (1);
-}
 int	keypressed(int key, t_cub *all)
 {
 	if (key == 124)
 		all->p->turnDirection = 1;
-	if (key == 123)
+	else if (key == 123)
 		all->p->turnDirection = -1;
 	if (key == 0)
-		all->p->walkDirectionx = 1;
-	if (key == 2)
 		all->p->walkDirectionx = -1;
-	if (key == 1)
+	else if (key == 2)
+	 	all->p->walkDirectionx = 1;
+	else if (key == 1)
 		all->p->walkDirectiony = -1;
-	if (key == 13)
+	else if (key == 13)
 		all->p->walkDirectiony = 1;
-	moveplayer(all);
-	mlx_clear_window(all->mlx, all->mlx_win);
-	affichminimap(all, all->img, 1);
+	// updat_data(all);
+	// mlx_clear_window(all->mlx, all->mlx_win);
+	// mlx_destroy_image(all->mlx, all->img->img);
+	// drawimg(all, 1);
+	// affichminimap(all, 1);
 	return (0);
 }
-void	checksizexy(t_cub *all, t_data *img)
+int	moveplayer(t_cub *all)
 {
-	all->h = 0;
-	all->w = 0;
-	all->img = img;
-	all->topy = all->yp + (all->translation_y / 15) + (all->translation_y / 15);
-	printf("jfdksklj%dkkkkkkkk%d\n", all->topy, all->k);
-	if (all->topy >= ft_strleny(all->map))
-		all->topy = ft_strleny(all->map) - 1;
-	if (all->k < 0)
-		all->k = 0;
+	// if (all->p->turnDirection == 1)
+	// 	moveraytleft(all);
+	// if (all->p->turnDirection == -1)
+	// 	moveraytright(all);
+	// if (all->p->walkDirectionx == -1)
+	// 	moveright(all);
+	// if (all->p->walkDirectionx == 1)
+	// 	moveleft(all);
+	// if (all->p->walkDirectiony == 1)
+	// 	moveup(all);
+	// if (all->p->walkDirectiony == -1)
+	// 	movedown(all);
+	updat_data(&all);
+	// if (all->p->turnDirection != 0 || all->p->walkDirectionx != 0 || all->p->walkDirectiony != 0)
+	// {
+	mlx_clear_window(all->mlx, all->mlx_win);
+	mlx_destroy_image(all->mlx, all->img->img);
+	drawimg(all, 1);
+	affichminimap(all, 1);
 	
-	// if (all->topy < 0)
-	// 	all->topy = abs(all->topy);
-}
-
-void	checklineofmap(t_cub *all)
-{
-	all->topx = all->xp + (all->translation_x / 15) + 4;
-	printf("topx=======>%d\n", all->topx);
-	all->w = 0;
-	// if (all->j < 0)
-	// 	all->j = 0;
-	// if (all->topx > (int)ft_strlen(all->map[all->k]))
-	// 	all->topx = ft_strlen(all->map[all->k]);
+	return (0);
 }
 
 void	paintmap(t_cub *all, t_data *img, int ch)
@@ -372,65 +396,41 @@ void	paintmap(t_cub *all, t_data *img, int ch)
 	checkplayer(all, ch);
 	x = all->pscreenx - 64;
 	y = all->pscreeny - 64;
-	printf("x%d y%d\n", x, y);
 	pixelmap(img, 0xff000);
 	while (all->map[i])
 	{
 		j = 0;
 		all->miniy = 16 * i - y;
-		while(all->map[i][j])
+		while(all->map[i][j] && all->map[i][j] != '\n')
 		{
 			all->minix = 16 * j - x;
 			if (all->map[i][j] == '1')
-				pixelcarre(all,14, img, 0xfffff);
+				pixelcarre(all, 15, img, 0xfffff);
 			j++;
 		}
 		i++;
 	}
-	all->img = img;
+	//all->img = img;
 }
 
-// void	paintmap2(t_cub *all)
-// {
-// 	all->k = all->diry - 10;
-// 	all->topy = all->diry + 10;
-// 	ch
-// }
-// void	moveplayer(t_cub *all, t_data *img)
-// {
-// 	checksizexy(all, img);
-// 	checklineofmap(all);
-// 	all->w = 0;
-// 	all->h = 0;
-// 	all->k = round(all->pscreeny) - 50;
-// 	all->j = round(all->pscreenx) - 50;
-// 	while(all->k <= all->topy)
-// 	{
-// 		all->j = round(all->pscreenx) - 50;
-// 		while (all->j <= all->topx)
-// 		{
-// 			if (all->map[all->k / 15][all->j / 15] == '1')
-// 				pixelcarre(all, img, 0xC3E8F5);
-// 			else if (all->map[all->k / 15][all->j / 15] != '0')
-// 				pixelcarre(all, img, 0xffffff);
-// 			all->j += 15;
-// 			all->w += 16;
-// 		}
-// 		all->k += 15;
-// 		all->h += 16; 
-// 	}
-
-// }
-void	affichminimap(t_cub *all, t_data *img, int ch)
+void	affichminimap(t_cub *all, int ch)
 {
-	all->img = img;
+	//if (ch == 0)
+		//all->p->turnDirection = 0; all->p->walkDirectionx = 0; all->p->walkDirectiony = 0;
+	// 	all->img = img;
 	paintmap(all, all->img, ch);
 	all->posx = all->pscreenx;
 	all->posy = all->pscreeny;
 	paintplayer(all, ch);
+	
 	mlx_put_image_to_window(all->mlx, all->mlx_win, all->img->img, 0, 0);
+	// raycasting(all);
+}
+
+void	raycasting(t_cub *all)
+{
+	mlx_hook(all->mlx_win, 3, 1L<<1, keyrelease, all);
 	mlx_hook(all->mlx_win, 2, 1L<<0, keypressed, all);
-	mlx_hook(all->mlx_win, 3, 0, keyrelease, all);
-	//mlx_loop_hook(all->mlx, moveplayer, all);
+	mlx_loop_hook(all->mlx, moveplayer, all);
 	mlx_loop(all->mlx);
 }
