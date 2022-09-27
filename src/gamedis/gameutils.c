@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 16:02:01 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/09/25 22:07:00 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/27 17:21:50 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,26 +44,18 @@ void	drawimg(t_cub *all, int ch)
 	}
 
 }
+
 void	ft_display(t_cub *all)
 {
-	// t_data	img;
 	all->img = (t_data *)malloc(sizeof(t_data));
 	all->mlx = mlx_init();
 	all->mlx_win = mlx_new_window(all->mlx, W, H, "CUB3D");
-	// all->img->img = mlx_new_image(all->mlx, 128, 128);
-	// all->img->addr = mlx_get_data_addr(all->img->img, &all->img->bits_per_pixel, &all->img->line_length, &all->img->endian);
-	// all->img = &img;
-	
 	drawimg(all, 0);
-	// draw_cieling()
 	mlx_hook(all->mlx_win, 3, 1L<<1, keyrelease, all);
 	mlx_hook(all->mlx_win, 2, 1L<<0, keypressed, all);
 	mlx_loop_hook(all->mlx, moveplayer, all);
 	mlx_loop(all->mlx);					
-	//affichminimap(all, &img, 0);
 }
-
-// void	pixemap(t_cub *all, t_data *img, int color)
 
 void	pixelcarre(t_cub *all, int pi, t_data *img, int color)
 {
@@ -84,7 +76,6 @@ void	pixelcarre(t_cub *all, int pi, t_data *img, int color)
 		i++;
 	}
 }
-
 
 void	pixelmap(t_data *img, int color)
 {
@@ -231,7 +222,6 @@ int	checkwall(t_cub *all)
 		return (0);
 	if (x < 0 && x > x_line)
 		return (0); 
-	// printf("x===>%d y===>%d\n", x, y);
 	if (all->map[y][x] == '1')
 		return (0);
 	return (1);
@@ -331,11 +321,6 @@ int keyrelease(int key, t_cub *all)
 		all->p->walkDirectiony = 0;
 	else if (key == 13)
 		all->p->walkDirectiony = 0;
-	// updat_data(all);
-	// mlx_clear_window(all->mlx, all->mlx_win);
-	// mlx_destroy_image(all->mlx, all->img->img);
-	// drawimg(all, 1);
-	// affichminimap(all, 1);
 	return (0);
 }
 
@@ -354,30 +339,11 @@ int	keypressed(int key, t_cub *all)
 		all->p->walkDirectiony = -1;
 	else if (key == 13)
 		all->p->walkDirectiony = 1;
-	// updat_data(all);
-	// mlx_clear_window(all->mlx, all->mlx_win);
-	// mlx_destroy_image(all->mlx, all->img->img);
-	// drawimg(all, 1);
-	// affichminimap(all, 1);
 	return (0);
 }
 int	moveplayer(t_cub *all)
 {
-	// if (all->p->turnDirection == 1)
-	// 	moveraytleft(all);
-	// if (all->p->turnDirection == -1)
-	// 	moveraytright(all);
-	// if (all->p->walkDirectionx == -1)
-	// 	moveright(all);
-	// if (all->p->walkDirectionx == 1)
-	// 	moveleft(all);
-	// if (all->p->walkDirectiony == 1)
-	// 	moveup(all);
-	// if (all->p->walkDirectiony == -1)
-	// 	movedown(all);
 	updat_data(&all);
-	// if (all->p->turnDirection != 0 || all->p->walkDirectionx != 0 || all->p->walkDirectiony != 0)
-	// {
 	mlx_clear_window(all->mlx, all->mlx_win);
 	mlx_destroy_image(all->mlx, all->img->img);
 	drawimg(all, 1);
@@ -410,21 +376,37 @@ void	paintmap(t_cub *all, t_data *img, int ch)
 		}
 		i++;
 	}
-	//all->img = img;
+}
+
+void	fovminimap(t_cub *all)
+{
+	int	i;
+
+	all->ray->colid = 0;
+	all->ray->fovangle = 60 * (M_PI / 180);
+	all->ray->wallstrip = 1;
+	all->ray->numrays = W / all->ray->wallstrip;
+	all->ray->rayangle = all->p->rotationangl - (all->ray->fovangle / 2);
+	i = 0;
+	while (i < all->ray->numrays)
+	{
+		all->dirx = all->xp + (cos(all->ray->rayangle) * 30);
+		all->diry = all->yp + (sin(all->ray->rayangle) * 30);
+		drawingline(all);
+		all->ray->rayangle += all->ray->fovangle / all->ray->numrays;
+		all->ray->colid++;
+		i++;
+	}
 }
 
 void	affichminimap(t_cub *all, int ch)
 {
-	//if (ch == 0)
-		//all->p->turnDirection = 0; all->p->walkDirectionx = 0; all->p->walkDirectiony = 0;
-	// 	all->img = img;
 	paintmap(all, all->img, ch);
 	all->posx = all->pscreenx;
 	all->posy = all->pscreeny;
 	paintplayer(all, ch);
-	
+	fovminimap(all);
 	mlx_put_image_to_window(all->mlx, all->mlx_win, all->img->img, 0, 0);
-	// raycasting(all);
 }
 
 void	raycasting(t_cub *all)

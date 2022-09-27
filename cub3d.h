@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/09/25 20:54:16 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/27 16:38:53 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,16 @@ typedef struct  player
 	float	rotationspeed;
 }				t_player;
 
+typedef struct rays
+{
+	double		fovangle;
+	int			wallstrip;
+	int			numrays;
+	double		rayangle;
+	int			colid;
+	
+}				t_rays;
+
 typedef struct s_cub
 {
 	char			**map;
@@ -74,7 +84,6 @@ typedef struct s_cub
 	double			posy;
 	int				xp;
 	int				yp;
-	int				checker;
 	int				topy;
 	int				topx;
 	int				i;
@@ -82,21 +91,17 @@ typedef struct s_cub
 	int				k;
 	double			pscreenx;
 	double			pscreeny;
-	double			translation_x;
-	double			translation_y;
 	double 			minix;
 	double 			miniy;
-	double				disy;
-	double				disx;
-	int				centerx;
-	int				centery;
 	char			P;
-	int				sizemy;
 	float			dirx;
 	float			diry;
+	int				checker;
+	int				sizemy;
 	float			ang;
 	t_info			info;
 	t_player		*p;
+	t_rays			*ray;
 }	t_cub;
 
 
