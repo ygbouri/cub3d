@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/09/27 16:38:53 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/29 23:16:54 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <string.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <limits.h>
+# include <stdbool.h>
 # define W 1024
 # define H 512
 
@@ -64,13 +66,19 @@ typedef struct  player
 
 typedef struct rays
 {
-	double		fovangle;
-	int			wallstrip;
-	int			numrays;
-	double		rayangle;
-	int			colid;
-	
-}				t_rays;
+	double			fovangle;
+	int				wallstrip;
+	int				numrays;
+	double			rayangle;
+	int				colid;
+	double			wallhitx;
+	double			wallhity;
+	int				distance;
+	bool				downdirect;
+	bool				updirect;
+	bool				leftdirect;
+	bool				rightdirect;
+}					t_rays;
 
 typedef struct s_cub
 {
@@ -99,6 +107,8 @@ typedef struct s_cub
 	int				checker;
 	int				sizemy;
 	float			ang;
+	double			distancexx;
+	double			distanceyy;
 	t_info			info;
 	t_player		*p;
 	t_rays			*ray;
