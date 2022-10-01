@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/09/29 23:16:54 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/10/01 23:57:12 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,21 @@ typedef struct rays
 	int				colid;
 	double			wallhitx;
 	double			wallhity;
-	int				distance;
+	double			distance;
 	bool				downdirect;
 	bool				updirect;
 	bool				leftdirect;
 	bool				rightdirect;
 }					t_rays;
+
+typedef struct drawrays
+{
+	double			x0;
+	double			y0;
+	double			x1; 
+	double			y1;
+	struct drawrays	*next;
+}				t_drawrays;
 
 typedef struct s_cub
 {
@@ -112,8 +121,15 @@ typedef struct s_cub
 	t_info			info;
 	t_player		*p;
 	t_rays			*ray;
+	t_drawrays		*node;
 }	t_cub;
 
+
+typedef struct s_pos
+{
+	double	x;
+	double	y;
+}			t_pos;
 
 /*************************************************/
 
@@ -195,8 +211,12 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void	affichminimap(t_cub *all, int ch);
 void	pixelcarre(t_cub *all, int pi, t_data *img, int color);
 void	raycasting(t_cub *all);
-int keyrelease(int key, t_cub *all);
-int	keypressed(int key, t_cub *all);
-int	moveplayer(t_cub *all);
+int 	keyrelease(int key, t_cub *all);
+int		keypressed(int key, t_cub *all);
+int		moveplayer(t_cub *all);
+int	closewin(int key, t_cub *all);
+void	drawingray(t_cub *all, double x0, double y0, double x1, double y1);
+t_drawrays *lstnew(double x, double y, double a, double b);
+void	lstaddback(t_drawrays **header, t_drawrays *new);
 
 #endif

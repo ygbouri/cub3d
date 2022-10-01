@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 16:02:01 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/09/30 00:37:40 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/10/01 23:59:54 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,7 @@ void	drawimg(t_cub *all, int ch)
 	all->img->img = mlx_new_image(all->mlx, W, H);
 	all->img->addr = mlx_get_data_addr(all->img->img, &all->img->bits_per_pixel, &all->img->line_length, &all->img->endian);		
 	if (ch == 0)
-	{
-			affichminimap(all, 0);
-			
-	}
-
+		affichminimap(all, 0);
 }
 
 void	ft_display(t_cub *all)
@@ -53,8 +49,9 @@ void	ft_display(t_cub *all)
 	drawimg(all, 0);
 	mlx_hook(all->mlx_win, 3, 1L<<1, keyrelease, all);
 	mlx_hook(all->mlx_win, 2, 1L<<0, keypressed, all);
+	mlx_hook(all->mlx_win, 17, 0, closewin, all);
 	mlx_loop_hook(all->mlx, moveplayer, all);
-	mlx_loop(all->mlx);					
+	mlx_loop(all->mlx);		
 }
 
 void	pixelcarre(t_cub *all, int pi, t_data *img, int color)
@@ -193,15 +190,20 @@ void	drawingline(t_cub *all)
 }
  void	paintplayer(t_cub *all, int ch)
 {
-	if(ch == 0)
-	{
-		all->p = iniatialiserp(all);
-		detectang(all);
-	}
+	int	i;
+	t_drawrays *tmp;
+
+	i = 0;
+	tmp = all->node;
+	(void)ch;
 	my_mlx_pixel_put(all->img, 64, 64, 0xFD1700);
-	// all->dirx = all->xp + (cos(all->p->rotationangl) * 30);
-	// all->diry = all->yp + (sin(all->p->rotationangl) * 30);
-	// drawingline(all);
+	while (tmp->next)
+	{
+		
+		drawingray(all, tmp->x0, tmp->y0, tmp->x1, tmp->y1);
+		tmp = tmp->next;
+	}
+	drawingray(all, tmp->x0, tmp->y0, tmp->x1, tmp->y1);
 }
 
 int	checkwall(t_cub *all)
@@ -324,6 +326,9 @@ int keyrelease(int key, t_cub *all)
 		all->p->walkDirectiony = 0;
 	else if (key == 13)
 		all->p->walkDirectiony = 0;
+	// while (all->node->next)
+	// 	free(all->node);
+	// free(all->node);
 	return (0);
 }
 
@@ -342,31 +347,58 @@ int	keypressed(int key, t_cub *all)
 		all->p->walkDirectiony = -1;
 	else if (key == 13)
 		all->p->walkDirectiony = 1;
+	else if (key == 53)
+	{
+		printf("Game is finish\n");
+		exit(1);
+	}
 	return (0);
+}
+
+void	freenode(t_cub *all)
+{
+	while ((all->node)->next != NULL)
+	{
+		free(all->node);
+		all->node = (all->node)->next;
+	}
+	free(all->node);
 }
 int	moveplayer(t_cub *all)
 {
 	updat_data(&all);
 	mlx_clear_window(all->mlx, all->mlx_win);
 	mlx_destroy_image(all->mlx, all->img->img);
+	freenode(all);
 	drawimg(all, 1);
 	affichminimap(all, 1);
 	
 	return (0);
 }
 
+int	closewin(int key, t_cub *all)
+{
+	(void)key;
+	(void)all;
+	printf("game closed!!!!");
+	exit(0);
+}
+
 void	paintmap(t_cub *all, t_data *img, int ch)
 {
 	int		x;
 	int		y;
+	int		i;
+	int		j;
 
-	int i = 0;
-	int j = 0;
+	i = 0;
+	j = 0;
 	checkplayer(all, ch);
 	x = all->pscreenx - 64;
 	y = all->pscreeny - 64;
-	all->distancexx = x;
-	all->distanceyy = y;
+	// // all->distancexx = x;
+	// // all->distanceyy = y;
+	(void)ch;
 	pixelmap(img, 0xff000);
 	while (all->map[i])
 	{
@@ -376,7 +408,7 @@ void	paintmap(t_cub *all, t_data *img, int ch)
 		{
 			all->minix = 16 * j - x;
 			if (all->map[i][j] == '1')
-				pixelcarre(all, 16, img, 0xfffff);
+				pixelcarre(all, 16, img, (int)all->info.cc);
 			j++;
 		}
 		i++;
@@ -394,11 +426,6 @@ double	calculdistance(double x, double y, double a, double b)
 {
 	return (sqrt(pow((a - x), 2) + pow((b - y), 2)));
 }
-typedef struct s_pos
-{
-	double	x;
-	double	y;
-} t_pos;
 
 void	raydirection(t_cub *all)
 {
@@ -410,8 +437,6 @@ void	raydirection(t_cub *all)
 		all->ray->rightdirect = 1;
 	else 
 		all->ray->leftdirect = 1;
-	// if(all->ray->rayangle > (0.5 * M_PI) && (all->ray->rayangle < (1.5 * M_PI)))
-		// all->ray->rightdirect = 1;
 }
 
 void	drawingray(t_cub *all, double x0, double y0, double x1, double y1)
@@ -436,7 +461,7 @@ void	drawingray(t_cub *all, double x0, double y0, double x1, double y1)
 	incy = dy / (float)step;
 	x = x0;
 	y = y0;
-	while (i < step)
+	while (i < step && x < 128 && y < 128)
 	{
 		my_mlx_pixel_put(all->img, round(x), round(y),0xeb4034);
 		x += incx;
@@ -479,31 +504,12 @@ void	hintercept(t_cub *all, double angle)
 	double hori_d;
 	double verti_d;
 	double nbr;
-	bool hori_f = false;
-	bool verti_f = false;
-	// t_pos limit_image_dest;
-	
-	// double	nexthorx;
-	// double	nexthory;
-	// double	nextverx;
-	// double	nextvery;
-	// double	horwallhitx;
-	// double	horwallhity;
-	// double	verwallhitx;
-	// double	verwallhity;
-	// int		foundhwall;
-	// int		foundvwall;
-	// double 	hordistance;
-	// double 	verdistance;
-	// int		ifvertical;
+	bool hori_f; 
+	bool verti_f;
 
-	// // horizontal steps
-	// foundhwall = 0;
-	// horwallhitx = 0;
-	// horwallhity = 0;
-	// verwallhitx = 0;
-	// verwallhity = 0;
-	// ifvertical = 0;
+	hori_f = false;
+ 	verti_f = false;
+	int	len = ft_strleny(all->map) - 2;
 	angle = fmod(angle, 2 * M_PI);
 	if (angle < 0)
 		angle += 2 * M_PI;
@@ -514,17 +520,13 @@ void	hintercept(t_cub *all, double angle)
 	all->ray->rightdirect = ((angle < (0.5 * M_PI)) || (angle > (1.5 * M_PI)));
 	all->ray->leftdirect = !all->ray->rightdirect;
 	
-	// raydirection(all);
+	// horizontal
 	player.x = all->pscreenx;
 	player.y = all->pscreeny;
-	
-	
 	intercept.y = floor(player.y / 16) * 16;
 	if (all->ray->downdirect)
 		intercept.y += 16;
 	intercept.x = player.x + (intercept.y - player.y) / tan(angle);
-	
-
 	step.y = 16;
 	if (all->ray->updirect)
 		step.y *= -1;
@@ -533,9 +535,10 @@ void	hintercept(t_cub *all, double angle)
 		step.x *= -1;
 	if (all->ray->rightdirect && step.x < 0)
 		step.x *= -1;
-	
-
-	while ((intercept.x >= 0 && intercept.x < W) && (intercept.y >= 0 && intercept.y < H))
+	while ((((int)(intercept.y / 16) >= 0) 
+			&& (int)(intercept.y / 16) < len) 
+			&& (int)(intercept.x / 16)>= 0 
+			&& (int)(intercept.x / 16)< (int)ft_strlen(all->map[(int)intercept.y / 16]) * 16)
 	{
 		nbr = intercept.y;
 		if (all->ray->updirect)
@@ -569,9 +572,10 @@ void	hintercept(t_cub *all, double angle)
 	if (all->ray->downdirect && step.y < 0)
 		step.y *= -1;
 
-	while (
-		(intercept.x >= 0 && intercept.x < W) && (intercept.y >= 0 && intercept.y < H)
-	)
+	while ((((int)(intercept.y / 16) >= 0) 
+			&& (int)(intercept.y / 16) < len) 
+			&& (int)(intercept.x / 16)>= 0 
+			&& (int)(intercept.x / 16) < (int)ft_strlen(all->map[(int)intercept.y / 16]) * 16)
 	{
 		nbr = intercept.x;
 		if (all->ray->leftdirect)
@@ -593,126 +597,64 @@ void	hintercept(t_cub *all, double angle)
 	if (verti_f)
 		verti_d = calculdistance(player.x, player.y, verti.x, verti.y);
 	else 
-		verti_d = INT_MAX;
+		verti_d = 1e30;
 	if (hori_f)
 		hori_d = calculdistance(player.x, player.y, hori.x, hori.y);
 	else 
-		hori_d = INT_MAX;
+		hori_d = 1e30;
 	
 	if (hori_d < verti_d)
 	{
 		po.x = hori.x ;
 		po.y = hori.y;
+		all->ray->distance = hori_d;
 	}
 	else
 	{
 		po.x = verti.x;
 		po.y = verti.y;
+		all->ray->distance = verti_d;
 	}
-	
-
-	
-	
-	// limit_image_dest.x = 64 / cos(angle);
-	// limit_image_dest.y = 64 / sin(angle);
-	// if (po.x > limit_image_dest.x)
-	// 	po.x = limit_image_dest.x;
-	// if (po.y > limit_image_dest.y)
-	// 	po.y = limit_image_dest.y;
-	
-	drawingray(
-		all, player.x - all->distancexx,
-		player.y - all->distanceyy,
-		po.x - all->distancexx,
-		po.y -all->distanceyy
-		);
-	//printf("ray index :%d\n", all->ray->colid);
-	// ystep = 16;
-	// if (all->ray->updirect == 1)
-	// 	ystep *= -1;
-	// xstep = 16 / tan(all->ray->rayangle);
-	// if (all->ray->leftdirect == 1 && xstep > 0)
-	// 	xstep *= -1;
-	// if (all->ray->rightdirect == 1 && xstep < 0)
-	// 	xstep *= -1;
-	// nexthorx = xintercept;
-	// nexthory = intercept.y;
-	// if (all->ray->updirect)
-	// 	nexthorx--;
-	// while (nexthorx >= 0 && nexthorx < W && nexthory >= 0 && nexthory < H)
-	// {
-	// 	if (all->map[(int)nexthory / 16][(int)nexthorx / 16] == '1')
-	// 	{
-	// 		horwallhitx = nexthorx;
-	// 		horwallhity = nexthory;
-	// 		foundhwall = 1;
-	// 		break;
-	// 	}
-	// 	else
-	// 	{
-	// 		nexthorx += xstep;
-	// 		nexthory += ystep;
-	// 	}
-	// }
-	// // vertical steps
-
-	// foundvwall = 0;
-	// xintercept = floor(all->pscreeny / 16) * 16;
-	// if (all->ray->rightdirect == 1)
-	// 	xintercept += 16;
-	// yintercept = all->pscreeny + (xintercept - all->pscreenx) / tan(all->ray->rayangle);
-	// xstep = 16;
-	// if (all->ray->leftdirect == 1)
-	// 	xstep *= -1;
-	// ystep = 16 / tan(all->ray->rayangle);
-	// if (all->ray->updirect == 1 && xstep > 0)
-	// 	ystep *= -1;
-	// if (all->ray->downdirect == 1 && xstep < 0)
-	// 	ystep *= -1;
-	// nextverx = xintercept;
-	// nextvery = yintercept;
-	// if (all->ray->leftdirect)
-	// 	nexthorx--;
-	// while (nextverx >= 0 && nextverx < W && nextvery >= 0 && nextvery < H)
-	// {
-	// 	if (all->map[(int)nextvery / 16][(int)nextverx / 16] == '1')
-	// 	{
-	// 		verwallhitx = nextverx;
-	// 		verwallhity = nextvery;
-	// 		foundhwall = 1;
-	// 		break;
-	// 	}
-	// 	else
-	// 	{
-	// 		nextverx += xstep;
-	// 		nextvery += ystep;
-	// 	}
-	// }
-	// //calcul distance 
-	// if (foundhwall)
-	// 	hordistance = calculdistance(all->pscreenx, all->pscreeny, horwallhitx, horwallhity);
-	// else
-	// 	hordistance = MAXFLOAT;
-	// if (foundvwall)
-	// 	verdistance = calculdistance(all->pscreenx, all->pscreeny, verwallhitx, verwallhity);
-	// else
-	// 	verdistance = MAXFLOAT;
-	// if (hordistance < verdistance)
-	// 	all->ray->wallhitx = hordistance;
-	// else
-	// 	all->ray->wallhitx = verdistance;
-	// if (hordistance < verdistance)
-	// 	all->ray->wallhity = hordistance;
-	// else
-	// 	all->ray->wallhity = verdistance;
-	// if (hordistance < verdistance)
-	// 	all->ray->distance = hordistance;
-	// else
-	// 	all->ray->distance = verdistance;
-	// if (verdistance < hordistance)
-	// 	ifvertical = 1;
+	double departx = player.x - all->distancexx;
+	double departy = player.y - all->distanceyy;
+	double    finx 	= po.x - all->distancexx;
+	double    finy 	= po.y - all->distanceyy;
+	lstaddback(&(all->node), lstnew(departx, departy, finx, finy));
 }
 
+t_drawrays *lstnew(double x, double y, double a, double b)
+{
+	t_drawrays	*element;
+
+	element = (t_drawrays *)malloc(sizeof(t_drawrays));
+	if (!element)
+		return (NULL);
+	element->x0 = x;
+	element->y0 = y;
+	element->x1 = a;
+	element->y1 = b;
+	element->next = NULL;
+	return (element);
+}
+
+void	lstaddback(t_drawrays **header, t_drawrays *new)
+{
+	t_drawrays	*p;
+
+	p = NULL;
+	if (header)
+	{
+		if ((*header) == NULL)
+			(*header) = new;
+		else
+		{
+			p = *header;
+			while (p->next != NULL)
+				p = p->next;
+			p->next = new;
+		}
+	}
+}
 
 void	initialrayvar(t_cub *all)
 {
@@ -729,34 +671,98 @@ void	initialrayvar(t_cub *all)
 	all->ray->leftdirect = false;
 	all->ray->rightdirect = false;
 }
+
+void	paintceiling(t_cub *all, int top)
+{
+	int	i;
+
+	i = 0;
+	while (i < top)
+	{
+		my_mlx_pixel_put(all->img, all->ray->colid, i, all->info.cc);
+		i++;
+	}
+}
+
+void	paintfloor(t_cub *all, int bottom)
+{
+	int	i;
+
+	i = bottom;
+	while (i < H)
+	{
+		my_mlx_pixel_put(all->img, all->ray->colid, i, all->info.fc);
+		i++;
+	}
+}
+
+void	renderthreeD(t_cub *all)
+{
+	int		i;
+	double	correctdistance;
+	double	distoprojectionplane;
+	double	wallheight;
+	int		wallstripheight;
+	int		topofwall;
+	int		bottomofwall;
+
+	i = 0;
+	correctdistance = 0;
+	correctdistance = all->ray->distance * cos(all->ray->rayangle - all->p->rotationangl);
+	distoprojectionplane = (W / 2.0) / tan(all->ray->fovangle / 2.0);
+	wallheight = (16 / correctdistance) * distoprojectionplane;
+	wallstripheight = (int)wallheight;
+	topofwall = (H / 2.0) - (wallstripheight / 2.0);
+	bottomofwall = (H / 2.0) + (wallstripheight / 2.0);
+	if (topofwall < 0 || topofwall > H)
+		topofwall = 0;
+	if (bottomofwall > H || bottomofwall < 0)
+		bottomofwall = H;
+	i = topofwall;
+	paintceiling(all, topofwall);
+	paintfloor(all, bottomofwall);
+	while (i < bottomofwall)
+	{
+		my_mlx_pixel_put(all->img, all->ray->colid, i, 0x3A3845);
+		i++;
+	}
+}
+
 void	fovminimap(t_cub *all)
 {
-	double inc_angle;
-
+	double 		inc_angle;
 
 	inc_angle = all->ray->fovangle / W;
 	initialrayvar(all);
-	// conserveangle(all);
-	while (all->ray->colid < W)
+	while (all->ray->colid < all->ray->numrays)
 	{
 		hintercept(all, all->ray->rayangle);
-		// all->dirx = all->ray->wallhitx;
-		// all->diry = all->ray->wallhity;
-		// drawingline(all);
-		// break;
+		renderthreeD(all);
 		all->ray->rayangle += inc_angle;
 		all->ray->colid++;
 	}
-	//exit(1);
 }
+
 
 void	affichminimap(t_cub *all, int ch)
 {
-	paintmap(all, all->img, ch);
+	int x,y;
+	all->node = NULL;
+	checkplayer(all, ch);
+	x = all->pscreenx - 64;
+	y = all->pscreeny - 64;
+	all->distancexx = x;
+	all->distanceyy = y;
 	all->posx = all->pscreenx;
 	all->posy = all->pscreeny;
-	paintplayer(all, ch);
+	if(ch == 0)
+	{
+		all->p = iniatialiserp(all);
+		detectang(all);
+	}
 	fovminimap(all);
+	paintmap(all, all->img, ch);
+	paintplayer(all, ch);
 	mlx_put_image_to_window(all->mlx, all->mlx_win, all->img->img, 0, 0);
 }
 
