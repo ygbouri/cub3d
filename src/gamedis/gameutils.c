@@ -6,141 +6,167 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 16:02:01 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/02 12:56:40 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/10/02 19:32:51 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
 
-
-
-
-
-void	hintercept(t_cub *all, double angle)
+void	initialiserinter(t_glpos *gl)
 {
-	t_pos	intercept;
-	t_pos	player;
-	t_pos	step;
-	t_pos	po;
-	t_pos  hori;
-	t_pos  verti;
-	double hori_d;
-	double verti_d;
-	double nbr;
-	bool hori_f; 
-	bool verti_f;
+	gl->intercept.x = 0;
+	gl->intercept.y = 0;
+	gl->player.x = 0;
+	gl->player.y = 0;
+	gl->step.x = 0;
+	gl->step.y = 0;
+	gl->po.x = 0;
+	gl->po.y = 0;
+	gl->hori.x = 0;
+	gl->hori.y = 0;
+	gl->verti.x = 0;
+	gl->verti.y = 0;
+	gl->nbr = 0;
+	gl->hori_d = 0;
+	gl->verti_d = 0;
+	gl->hori_f = false;
+ 	gl->verti_f = false;
+}
 
-	hori_f = false;
- 	verti_f = false;
-	int	len = ft_strleny(all->map);
+void	calculhoridis(t_cub *all, t_glpos *glpos, int len)
+{
+	while ((((int)(glpos->intercept.y / 16) >= 0) 
+			&& (int)(glpos->intercept.y / 16) < len) 
+			&& ((int)(glpos->intercept.x / 16) >= 0) 
+			&& ((int)(glpos->intercept.x / 16) < (int)ft_strlen(all->map[(int)glpos->intercept.y / 16]) * 16))
+	{
+		glpos->nbr = glpos->intercept.y;
+		if (all->ray->updirect)
+			glpos->nbr--;
+		if (checkwall_ray(all, glpos->intercept.x, glpos->nbr))
+		{
+			glpos->intercept.x += glpos->step.x;
+			glpos->intercept.y += glpos->step.y;
+		}
+		else
+		{
+			glpos->hori_f = true;
+			glpos->hori.x = glpos->intercept.x;
+			glpos->hori.y = glpos->intercept.y;
+			break;
+		}
+	}
+}
+
+void	intercephori(t_cub *all, t_glpos *glpos, double angle, int len)
+{
+	glpos->player.x = all->pscreenx;
+	glpos->player.y = all->pscreeny;
+	glpos->intercept.y = floor(glpos->player.y / 16) * 16;
+	if (all->ray->downdirect)
+		glpos->intercept.y += 16;
+	glpos->intercept.x = glpos->player.x + (glpos->intercept.y - glpos->player.y) / tan(angle);
+	glpos->step.y = 16;
+	if (all->ray->updirect)
+		glpos->step.y *= -1;
+	glpos->step.x = glpos->step.y / tan(angle);
+	if (all->ray->leftdirect && glpos->step.x > 0)
+		glpos->step.x *= -1;
+	if (all->ray->rightdirect && glpos->step.x < 0)
+		glpos->step.x *= -1;
+	calculhoridis(all, glpos,len);
+}
+
+void	calculvertidis(t_cub *all, t_glpos *glpos, int len)
+{
+	while ((((int)(glpos->intercept.y / 16) >= 0) 
+			&& (int)(glpos->intercept.y / 16) < len) 
+			&& ((int)(glpos->intercept.x / 16) >= 0)
+			&& ((int)(glpos->intercept.x / 16) < (int)ft_strlen(all->map[(int)glpos->intercept.y / 16]) * 16))
+	{
+		glpos->nbr = glpos->intercept.x;
+		if (all->ray->leftdirect)
+			glpos->nbr--;
+		if (checkwall_ray(all, glpos->nbr, glpos->intercept.y))
+		{
+			glpos->intercept.x +=  glpos->step.x;
+			glpos->intercept.y +=  glpos->step.y;
+		}
+		else
+		{
+			glpos->verti_f = true;
+			glpos->verti.x = glpos->intercept.x;
+			glpos->verti.y = glpos->intercept.y;
+			break;
+		}
+	}
+}
+
+void	intercepverti(t_cub *all, t_glpos *glpos, double angle, int len)
+{
+	glpos->intercept.x = floor(glpos->player.x / 16) * 16;
+	if (all->ray->rightdirect)
+		glpos->intercept.x += 16;
+	glpos->intercept.y = glpos->player.y + (glpos->intercept.x - glpos->player.x) * tan(angle);
+	glpos->step.x = 16;
+	if (all->ray->leftdirect)
+		glpos->step.x *= -1;
+	glpos->step.y = glpos->step.x * tan(angle);
+	if (all->ray->updirect && glpos->step.y > 0)
+		glpos->step.y *= -1;
+	if (all->ray->downdirect && glpos->step.y < 0)
+		glpos->step.y *= -1;
+	calculvertidis(all, glpos,len);
+}
+
+void	chosedistance(t_cub *all, t_glpos *glpos)
+{
+	if (glpos->verti_f)
+		glpos->verti_d = calculdistance(glpos->player.x, glpos->player.y, glpos->verti.x, glpos->verti.y);
+	else 
+		glpos->verti_d = 1e30;
+	if (glpos->hori_f)
+		glpos->hori_d = calculdistance(glpos->player.x, glpos->player.y, glpos->hori.x, glpos->hori.y);
+	else 
+		glpos->hori_d = 1e30;
+	
+	if (glpos->hori_d < glpos->verti_d)
+	{
+		glpos->po.x = glpos->hori.x ;
+		glpos->po.y = glpos->hori.y;
+		all->ray->distance = glpos->hori_d;
+	}
+	else
+	{
+		glpos->po.x = glpos->verti.x;
+		glpos->po.y = glpos->verti.y;
+		all->ray->distance = glpos->verti_d;
+	}
+}
+
+void	hintercept(t_cub *all, double angle, t_glpos *glpos)
+{
+	int		len;
+	double	departx;
+	double	departy;
+	double	finx;
+	double	finy;
+	
+	initialiserinter(glpos);
+	len = ft_strleny(all->map);
 	angle = fmod(angle, 2 * M_PI);
 	if (angle < 0)
 		angle += 2 * M_PI;
 	all->ray->downdirect = (angle >= 0 && angle <= M_PI);
-	all->ray->updirect = !all->ray->downdirect;
-	
+	all->ray->updirect = !all->ray->downdirect;	
 	all->ray->rightdirect = ((angle < (0.5 * M_PI)) || (angle > (1.5 * M_PI)));
 	all->ray->leftdirect = !all->ray->rightdirect;
-	// horizontal
-	player.x = all->pscreenx;
-	player.y = all->pscreeny;
-	intercept.y = floor(player.y / 16) * 16;
-	if (all->ray->downdirect)
-		intercept.y += 16;
-	intercept.x = player.x + (intercept.y - player.y) / tan(angle);
-	step.y = 16;
-	if (all->ray->updirect)
-		step.y *= -1;
-	step.x = step.y / tan(angle);
-	if (all->ray->leftdirect && step.x > 0)
-		step.x *= -1;
-	if (all->ray->rightdirect && step.x < 0)
-		step.x *= -1;
-	while ((((int)(intercept.y / 16) >= 0) 
-			&& (int)(intercept.y / 16) < len) 
-			&& ((int)(intercept.x / 16)>= 0) 
-			&& ((int)(intercept.x / 16)< (int)ft_strlen(all->map[(int)intercept.y / 16]) * 16))
-	{
-		nbr = intercept.y;
-		if (all->ray->updirect)
-			nbr--;
-		if (checkwall_ray(all, intercept.x, nbr))
-		{
-			intercept.x += step.x;
-			intercept.y += step.y;
-		}
-		else
-		{
-			hori_f = true;
-			hori.x = intercept.x;
-			hori.y = intercept.y;
-			break;
-		}
-	}
-	// vertical
-	intercept.x = floor(player.x / 16) * 16;
-	if (all->ray->rightdirect)
-		intercept.x += 16;
-	intercept.y = player.y + (intercept.x - player.x) * tan(angle);
-
-	step.x = 16;
-	if (all->ray->leftdirect)
-		step.x *= -1;
-	step.y = step.x * tan(angle);
-	if (all->ray->updirect && step.y > 0)
-		step.y *= -1;
-	if (all->ray->downdirect && step.y < 0)
-		step.y *= -1;
-
-	while ((((int)(intercept.y / 16) >= 0) 
-			&& (int)(intercept.y / 16) < len) 
-			&& ((int)(intercept.x / 16) >= 0)
-			&& ((int)(intercept.x / 16) < (int)ft_strlen(all->map[(int)intercept.y / 16]) * 16))
-	{
-		nbr = intercept.x;
-		if (all->ray->leftdirect)
-			nbr--;
-		if (checkwall_ray(all, nbr, intercept.y))
-		{
-			intercept.x += step.x;
-			intercept.y += step.y;
-		}
-		else
-		{
-			verti_f = true;
-			verti.x = intercept.x;
-			verti.y = intercept.y;
-			break;
-		}
-	}
-	if (verti_f)
-		verti_d = calculdistance(player.x, player.y, verti.x, verti.y);
-	else 
-		verti_d = 1e30;
-	if (hori_f)
-		hori_d = calculdistance(player.x, player.y, hori.x, hori.y);
-	else 
-		hori_d = 1e30;
-	
-	if (hori_d < verti_d)
-	{
-		po.x = hori.x ;
-		po.y = hori.y;
-		all->ray->distance = hori_d;
-	}
-	else
-	{
-		po.x = verti.x;
-		po.y = verti.y;
-		all->ray->distance = verti_d;
-	}
-	double departx = player.x - all->distancexx;
-	double departy = player.y - all->distanceyy;
-	double    finx 	= po.x - all->distancexx;
-	double    finy 	= po.y - all->distanceyy;
+	intercephori(all, glpos, angle, len);
+	intercepverti(all, glpos, angle, len);
+	chosedistance(all, glpos);
+	departx = glpos->player.x - all->distancexx;
+	departy = glpos->player.y - all->distanceyy;
+	finx = glpos->po.x - all->distancexx;
+	finy = glpos->po.y - all->distanceyy;
 	lstaddback(&(all->node), lstnew(departx, departy, finx, finy));
 }
-
-
-
-

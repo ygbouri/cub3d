@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:54:05 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/02 12:56:09 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/10/02 18:23:19 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,16 +71,21 @@ void	renderthreeD(t_cub *all)
 void	fovminimap(t_cub *all)
 {
 	double 		inc_angle;
+	t_glpos		glpos;
 
 	inc_angle = all->ray->fovangle / W;
+	//init_gl(&glpos, all);
 	initialrayvar(all);
+	//all->compteur = 0;
 	while (all->ray->colid < all->ray->numrays)
 	{
-		hintercept(all, all->ray->rayangle);
+		hintercept(all, all->ray->rayangle, &glpos);
 		renderthreeD(all);
 		all->ray->rayangle += inc_angle;
 		all->ray->colid++;
+		//all->compteur += 1;
 	}
+	//printf("rays %d compteur%d\n", all->ray->numrays,all->ray->colid);
 }
 
 

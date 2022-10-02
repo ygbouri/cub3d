@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/10/02 12:59:01 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/10/02 18:50:13 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ typedef struct s_cub
 	float			ang;
 	double			distancexx;
 	double			distanceyy;
+	int				compteur;
 	t_info			info;
 	t_player		*p;
 	t_rays			*ray;
@@ -131,6 +132,20 @@ typedef struct s_pos
 	double	y;
 }			t_pos;
 
+typedef struct glpos
+{
+	t_pos	intercept;
+	t_pos	player;
+	t_pos	step;
+	t_pos	po;
+	t_pos	hori;
+	t_pos	verti;
+	double 	hori_d;
+	double 	verti_d;
+	double 	nbr;
+	bool hori_f; 
+	bool verti_f;
+}				t_glpos;
 /*************************************************/
 
 int				str_len(const char *s, char c);
@@ -240,7 +255,7 @@ void	conserveangle(t_cub *all);
 double	calculdistance(double x, double y, double a, double b);
 void	raydirection(t_cub *all);
 int	checkwall_ray(t_cub *all, double xr, double yr);
-void	hintercept(t_cub *all, double angle);
+void	hintercept(t_cub *all, double angle, t_glpos *glpos);
 t_drawrays *lstnew(double x, double y, double a, double b);
 void	initialrayvar(t_cub *all);
 void	paintceiling(t_cub *all, int top);
@@ -248,4 +263,5 @@ void	paintfloor(t_cub *all, int bottom);
 void	renderthreeD(t_cub *all);
 void	fovminimap(t_cub *all);
 int	ft_strleny(char **str);
+//void	init_gl(t_glpos *gl, t_cub *all);
 #endif

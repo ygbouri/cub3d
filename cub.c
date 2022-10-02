@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 15:57:21 by momayaz           #+#    #+#             */
-/*   Updated: 2022/10/01 23:19:13 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/10/02 16:45:19 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,4 @@ int main(int ac, char **av)
 	all.ray = (t_rays *)malloc(sizeof(t_rays));
 	big_parss(ac, av, &all, 'm');
 	ft_display(&all);
-	// raycasting(&all);
 }
