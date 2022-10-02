@@ -6,13 +6,16 @@
 #    By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 14:45:57 by ygbouri           #+#    #+#              #
-#    Updated: 2022/09/25 20:46:09 by ygbouri          ###   ########.fr        #
+#    Updated: 2022/10/02 12:59:36 by ygbouri          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC = cub.c src/parsing/check_clr.c src/parsing/check_map.c src/parsing/pars_line.c\
 		src/parsing/split.c src/parsing/utils.c src/parsing/utils1.c\
-		src/parsing/utils2.c src/gamedis/gameutils.c
+		src/parsing/utils2.c src/gamedis/gameutils.c src/gamedis/gameutils1.c\
+		src/gamedis/gameutils2.c src/gamedis/gameutils3.c src/gamedis/gameutils4.c\
+		src/gamedis/gameutils5.c src/gamedis/gameutils6.c src/gamedis/gameutils7.c\
+		src/gamedis/gameutils8.c src/gamedis/gameutils9.c
 
 OBJ = $(SRC:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/10/01 23:57:12 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/10/02 12:59:01 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,10 @@ typedef struct rays
 
 typedef struct drawrays
 {
-	double			x0;
-	double			y0;
-	double			x1; 
-	double			y1;
+	double			departx;
+	double			departy;
+	double			finx; 
+	double			finy;
 	struct drawrays	*next;
 }				t_drawrays;
 
@@ -206,17 +206,46 @@ void			main_parse(int ac, char **av, t_cub *parsing, int mode);
 int				ft_error(char *str);
 /***************************************************************/
 
-void	ft_display(t_cub *all);
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
-void	affichminimap(t_cub *all, int ch);
-void	pixelcarre(t_cub *all, int pi, t_data *img, int color);
-void	raycasting(t_cub *all);
-int 	keyrelease(int key, t_cub *all);
-int		keypressed(int key, t_cub *all);
-int		moveplayer(t_cub *all);
-int	closewin(int key, t_cub *all);
-void	drawingray(t_cub *all, double x0, double y0, double x1, double y1);
-t_drawrays *lstnew(double x, double y, double a, double b);
-void	lstaddback(t_drawrays **header, t_drawrays *new);
+void		ft_display(t_cub *all);
+void		my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void		affichminimap(t_cub *all, int ch);
+void		pixelcarre(t_cub *all, int pi, t_data *img, int color);
+void		raycasting(t_cub *all);
+int			keyrelease(int key, t_cub *all);
+int			keypressed(int key, t_cub *all);
+int			moveplayer(t_cub *all);
+int			closewin(int key, t_cub *all);
+void		drawingray(t_cub *all, double x0, double y0, double x1, double y1);
+t_drawrays 	*lstnew(double x, double y, double a, double b);
+void		lstaddback(t_drawrays **header, t_drawrays *new);
+void		drawimg(t_cub *all, int ch);
+void		pixelmap(t_data *img, int color);
+int	checkplayer(t_cub *all, int ch);
+t_player	*iniatialiserp(t_cub *all);
+void	detectang(t_cub *all);
 
+void	drawingline(t_cub *all);
+ void	paintplayer(t_cub *all, int ch);
+int	checkwall(t_cub *all);
+void	moveleft(t_cub *all);
+void	moveright(t_cub *all);
+void	moveup(t_cub *all);
+void	movedown(t_cub *all);
+void	moveraytleft(t_cub *all);
+void	moveraytright(t_cub *all);
+void	updat_data(t_cub **all);
+void	freenode(t_cub *all);
+void	paintmap(t_cub *all, t_data *img, int ch);
+void	conserveangle(t_cub *all);
+double	calculdistance(double x, double y, double a, double b);
+void	raydirection(t_cub *all);
+int	checkwall_ray(t_cub *all, double xr, double yr);
+void	hintercept(t_cub *all, double angle);
+t_drawrays *lstnew(double x, double y, double a, double b);
+void	initialrayvar(t_cub *all);
+void	paintceiling(t_cub *all, int top);
+void	paintfloor(t_cub *all, int bottom);
+void	renderthreeD(t_cub *all);
+void	fovminimap(t_cub *all);
+int	ft_strleny(char **str);
 #endif
