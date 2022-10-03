@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:45:40 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/02 12:48:42 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/10/03 13:41:12 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ void	updat_data(t_cub **all)
 	(*all)->p->rotationangl = fmod((*all)->p->rotationangl, 2 * M_PI);
 	if ((*all)->p->rotationangl < 0)
 		(*all)->p->rotationangl +=  2 * M_PI;
+	else if ((*all)->p->rotationangl > 2 * M_PI)
+		(*all)->p->rotationangl -=  2 * M_PI;
 	(*all)->posx += cos((*all)->p->rotationangl) * step;
 	(*all)->posy += sin((*all)->p->rotationangl) * step;
 	if (checkwall(*all) == 1)

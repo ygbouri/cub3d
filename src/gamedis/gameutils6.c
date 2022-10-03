@@ -6,7 +6,7 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:45:47 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/02 12:52:11 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/10/03 14:13:22 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,12 @@ int	checkwall_ray(t_cub *all, double xr, double yr)
 	int	y;
 	int	x_line;
 
-	x = floor(xr / 16);
-	y = floor(yr / 16);
-	if (y < 0 && y > ft_strleny(all->map))
+	x = (int)floor(xr / 16);
+	y = (int)floor(yr / 16);
+	//printf("y===> %d\n", y);
+	if (y < 0 || y > ft_strleny(all->map))
 		return (0);
-	if (all->map[y] != NULL)
+	else if (all->map[y] != NULL)
 		x_line = ft_strlen(all->map[y]);
 	else
 		return (0);
