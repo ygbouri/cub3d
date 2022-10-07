@@ -1,10 +1,10 @@
 C 0,191,255
 F 0,128,0
 
-SO       ../../pics/purplebricks.xpm
-NO             ../../pics/redbricks.xpm
-EA           ../../pics/graybricks.xpm
-WE         ../../pics/yellowbricks.xpm
+SO       pics/purplebricks.xpm
+NO       pics/redbricks.xpm
+EA       pics/graybricks.xpm
+WE        pics/yellowbricks.xpm
 
 111111111111111
 100000100000001

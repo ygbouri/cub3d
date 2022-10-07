@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/09/13 13:45:15 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/10/06 14:25:16 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,23 @@
 # include <string.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <limits.h>
+# include <stdbool.h>
+# define W 1024
+# define H 512
+# define TEX_WI 64
+# define TEX_HE 64
+# define TAIL 64
 
+int lh;
+
+typedef struct  s_text
+{
+	void *img;
+	unsigned int *data;
+	int w;
+	int h;
+}   t_text;
 
 
 typedef struct s_info
@@ -36,13 +52,123 @@ typedef struct s_info
 	unsigned int	cc;
 	unsigned int	fc;
 	int				test[256];
-}					t_info;
+}
+					t_info;
+typedef struct	s_data {
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+}				t_data;
+
+typedef struct  player
+{
+	int		xp;
+	int		yp;
+	int		radius;
+	int		checker;
+	int		turnDirection;
+	int		walkDirectionx;
+	int		walkDirectiony;
+	double	rotationangl;
+	float	movespeed;
+	float	movestep;
+	float	rotationspeed;
+}				t_player;
+
+typedef struct rays
+{
+	double			fovangle;
+	int				wallstrip;
+	int				numrays;
+	double			rayangle;
+	int				colid;
+	double			wallhitx;
+	double			wallhity;
+	double			distance;
+	bool				downdirect;
+	bool				updirect;
+	bool				leftdirect;
+	bool				rightdirect;
+}					t_rays;
+
+typedef struct drawrays
+{
+	double			departx;
+	double			departy;
+	double			finx; 
+	double			finy;
+	struct drawrays	*next;
+}				t_drawrays;
+
+typedef struct s_pos
+{
+	double	x;
+	double	y;
+}			t_pos;
+
+typedef struct glpos
+{
+	t_pos	intercept;
+	t_pos	player;
+	t_pos	step;
+	t_pos	po;
+	t_pos	hori;
+	t_pos	verti;
+	double 	hori_d;
+	double 	verti_d;
+	double 	nbr;
+	bool hori_f; 
+	bool verti_f;
+}				t_glpos;
 
 typedef struct s_cub
 {
-	char	**map;
-	t_info	info;
+	char			**map;
+	void			*mlx;
+	void			*mlx_win;
+	t_data			*img;
+	int				w;
+	int				h;
+	double			posx;
+	double			posy;
+	int				xp;
+	int				yp;
+	int				topy;
+	int				topx;
+	int				i;
+	int				j;
+	int				k;
+	double			pscreenx;
+	double			pscreeny;
+	double 			minix;
+	double 			miniy;
+	char			P;
+	float			dirx;
+	float			diry;
+	int				checker;
+	int				sizemy;
+	float			ang;
+	double			distancexx;
+	double			distanceyy;
+	int				compteur;
+	t_info			info;
+	t_player		*p;
+	t_rays			*ray;
+	t_drawrays		*node;
+	t_glpos			*pos;
+	unsigned int	*wallTxt;
+	t_text			texture[6];
+	bool			hitV;
+	int				imgW;
+	float			oldplanex;
+	float			olddirx;
+	int 			imgH;
+	bool			door;
+	int				l7aj;
 }	t_cub;
+
 
 
 
@@ -118,43 +244,53 @@ char			*second_part(char *str);
 char			*get_next_line(int fd);
 int				check_colors(char *str);
 void			main_parse(int ac, char **av, t_cub *parsing, int mode);
-
-int				keypress(int keycode, t_key *key);
-int				keyrelease(int keycode, t_key *key);
-void			ft_herewego(t_game *game, t_cub parsing, int bonus);
-void			ft_print(t_raycast *ray, t_win *win, char **map, int bonus);
-
-void			ft_load(t_raycast *ray, void *mlx, t_cub parsing);
-void			ft_init(t_raycast *ray, t_cub parsing, char **map, int bonus);
-
-void			ft_init_key(t_key *key);
-int				ft_nsprite(char **map);
-void			ft_hitdoor(t_raycast *ray, char c);
-void			ft_checkdoor(char **map, float x, float y);
 int				ft_error(char *str);
+/***************************************************************/
 
-unsigned int	getcolor(t_texture *t, int x, int y);
-void			ft_swap(t_pair **sprites, int amount);
-float			ft_abs(float value);
-void			ft_put(t_win *win, unsigned int **buffer);
+void		ft_display(t_cub *all);
+void		my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void		affichminimap(t_cub *all, int ch);
+void		pixelcarre(t_cub *all, int pi, t_data *img, int color);
+void		raycasting(t_cub *all);
+int			keyrelease(int key, t_cub *all);
+int			keypressed(int key, t_cub *all);
+int			moveplayer(t_cub *all);
+int			closewin(int key, t_cub *all);
+void		drawingray(t_cub *all, double x0, double y0, double x1, double y1);
+t_drawrays 	*lstnew(double x, double y, double a, double b);
+void		lstaddback(t_drawrays **header, t_drawrays *new);
+void		drawimg(t_cub *all, int ch);
+void		pixelmap(t_data *img, int color);
+int	checkplayer(t_cub *all, int ch);
+t_player	*iniatialiserp(t_cub *all);
+void	detectang(t_cub *all);
 
-void			ft_init_v(t_raycast *ray, int x);
-void			ft_init_dist(t_raycast *ray);
-void			ft_wall_col(t_raycast *ray, char **map, int bonus);
-void			ft_side(t_raycast *ray);
-void			ft_init_c(t_raycast *ray, int x, int bonus);
-
-int				ft_sprites(t_raycast *ray, char **map);
-
-int				ft_move(t_game *game);
-
-int				ft_mouse(int x, int y, t_game *game);
-
-int				ft_minimap(t_raycast *ray, t_win *win, char **map);
-
-void			ft_free(t_cub *parsing, t_game *game);
-int				ft_close(void);
-
-void			ft_frame(t_raycast *ray);
-
+void	drawingline(t_cub *all);
+ void	paintplayer(t_cub *all, int ch);
+int	checkwall(t_cub *all);
+void	moveleft(t_cub *all);
+void	moveright(t_cub *all);
+void	moveup(t_cub *all);
+void	movedown(t_cub *all);
+void	moveraytleft(t_cub *all);
+void	moveraytright(t_cub *all);
+void	updat_data(t_cub **all);
+void	freenode(t_cub *all);
+void	paintmap(t_cub *all, t_data *img, int ch);
+void	conserveangle(t_cub *all);
+double	calculdistance(double x, double y, double a, double b);
+void	raydirection(t_cub *all);
+int	checkwall_ray(t_cub *all, double xr, double yr);
+void	hintercept(t_cub *all, double angle, t_glpos *glpos);
+t_drawrays *lstnew(double x, double y, double a, double b);
+void	initialrayvar(t_cub *all);
+void	paintceiling(t_cub *all, int top);
+void	paintfloor(t_cub *all, int bottom);
+void	renderthreeD(t_cub *all);
+void	fovminimap(t_cub *all);
+int	ft_strleny(char **str);
+int	ft_mouse(int x, int y, t_cub *game);
+void	calcTuxter(t_cub *all);
+int	checkdoor_ray(t_cub *all, double xr, double yr);
+//void	init_gl(t_glpos *gl, t_cub *all);
 #endif

@@ -6,11 +6,11 @@
 /*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 16:08:59 by momayaz           #+#    #+#             */
-/*   Updated: 2022/09/13 13:26:56 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/09/13 15:31:50 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../../cub3d.h"
 
 size_t	ft_strlen(char *s)
 {

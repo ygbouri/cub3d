@@ -3,14 +3,63 @@
 /*                                                        :::      ::::::::   */
 /*   cub.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 15:57:21 by momayaz           #+#    #+#             */
-/*   Updated: 2022/09/13 13:44:22 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/10/06 14:40:42 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "cub3d.h"
+
+void	calcTuxter(t_cub *all){
+	t_data info;
+	
+
+
+	all->texture[0].img = mlx_xpm_file_to_image(all->mlx, "./pics/graybricks.xpm", &all->texture[0].w, &all->texture[0].h);
+	if (!all->texture[0].img){
+		printf("0");
+		exit(1);
+	}
+	all->texture[0].data = (unsigned int*) mlx_get_data_addr(all->texture[0].img, &all->img->bits_per_pixel, &info.line_length, &info.endian);
+	all->texture[1].img = mlx_xpm_file_to_image(all->mlx, "./pics/purplebricks.xpm", &all->texture[1].w, &all->texture[1].h);
+	if (!all->texture[1].img)
+		{
+		printf("1");
+		exit(1);
+	}
+	all->texture[1].data = (unsigned int*) mlx_get_data_addr(all->texture[1].img, &all->img->bits_per_pixel, &info.line_length, &info.endian);
+	all->texture[2].img = mlx_xpm_file_to_image(all->mlx, "./pics/redbricks.xpm", &all->texture[2].w, &all->texture[2].h);
+	if (!all->texture[2].img)
+		{
+		printf("2");
+		exit(1);
+	}
+	all->texture[2].data = (unsigned int*) mlx_get_data_addr(all->texture[2].img, &all->img->bits_per_pixel, &info.line_length, &info.endian);
+	all->texture[3].img = mlx_xpm_file_to_image(all->mlx, "./pics/toady.xpm", &all->texture[3].w, &all->texture[3].h);
+	if (!all->texture[3].img)
+		{
+		printf("3");
+		exit(1);
+	}
+	all->texture[3].data = (unsigned int*) mlx_get_data_addr(all->texture[3].img, &all->img->bits_per_pixel, &info.line_length, &info.endian);
+	all->texture[4].img = mlx_xpm_file_to_image(all->mlx, "./images_64x64.xpm", &all->texture[4].w, &all->texture[4].h);
+	if (!all->texture[4].img)
+		{
+		printf("4");
+		exit(1);
+	}
+	all->texture[4].data = (unsigned int*) mlx_get_data_addr(all->texture[4].img, &all->img->bits_per_pixel, &info.line_length, &info.endian);
+	all->texture[5].img = mlx_xpm_file_to_image(all->mlx, "./box_64x64.xpm", &all->texture[5].w, &all->texture[5].h);
+	if (!all->texture[5].img)
+		{
+		printf("5");
+		exit(1);
+	}
+	all->texture[5].data = (unsigned int*) mlx_get_data_addr(all->texture[5].img, &all->img->bits_per_pixel, &info.line_length, &info.endian);
+}
+
 
 int	ft_error(char *str)
 {
@@ -104,10 +153,12 @@ int	big_parss(int ac, char *av[], t_cub *all, char c)
 	return (0);
 }
 
+int main(int ac, char **av)
+{
+	t_cub	all;
 
-int main(int ac, char **av){
-	t_cub all;
-
-	big_parss(ac, av, &all, 'm');
-	
+	all.checker = 0;
+	all.ray = (t_rays *)malloc(sizeof(t_rays));
+	big_parss(ac, av, &all, 'b');
+	ft_display(&all);
 }
