@@ -6,11 +6,89 @@
 /*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:54:05 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/06 16:23:07 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/10 09:41:53 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
+
+void getmapheight(t_cub *all)
+{
+	int i;
+
+	i = 0;
+	while (all->map[i])
+		i++;
+	all->info.mapheight = i;
+}
+
+void getmapwidth(t_cub *all)
+{
+	int i;
+
+	i = 0;
+	while (all->map[0][i])
+		i++;
+	all->info.mapwidth = i;
+}
+
+int	ft_abs(int value)
+{
+	if (value < 0)
+		return (-value);
+	printf("door found\n");
+	return (value);
+}
+
+void ft_findplayer(char **map, int *x, int *y)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j])
+		{
+			if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E' || map[i][j] == 'W')
+			{
+				*x = j;
+				*y = i;
+				return ;
+			}
+			j++;
+		}
+		i++;
+	}
+}
+
+void	ft_checkdoor(t_cub *all)
+{
+	int	i;
+	int	j;
+	int x, y;
+	
+	ft_findplayer(all->map, &x, &y);
+	i = -1;
+	while (all->map[++i])
+	{
+		j = -1;
+		while (all->map[i][++j])
+		{
+			if (all->map[i][j] == 'D' && (ft_abs(i - x) <= 2 || ft_abs(j - y) <= 2))
+			{
+				all->map[i][j] = 'O';
+			}
+			if (all->map[i][j] == 'O' && (ft_abs(i - x) >= 3 || ft_abs(j - y) >= 3))
+				all->map[i][j] = 'D';
+		}
+	}
+}
+
+//check if player is front of a door and open it and close it
+
+
 
 void	paintceiling(t_cub *all, int top)
 {
@@ -70,14 +148,12 @@ void	renderthreeD(t_cub *all)
 		all->l7aj = 2;
 	else if (all->ray->rightdirect && all->pos->verti_f)
 		all->l7aj = 1;
-	
 	if(all->map[(int)(all->pos->po.y / 16)][(int)(all->pos->po.x / 16)] == 'D')
 		all->l7aj = 4;
 	if((all->ray->updirect && all->pos->hori_f) && all->map[(int)((all->pos->po.y) / 16) - 1][(int)(all->pos->po.x / 16)] == 'D')
 		all->l7aj = 4;
 	if((all->ray->leftdirect && all->pos->verti_f) && all->map[(int)((all->pos->po.y) / 16)][(int)(all->pos->po.x / 16) - 1] == 'D')
 		all->l7aj = 4;
-	printf("%d ------ %c\n", all->l7aj, all->map[(int)(all->pos->po.y / 16) - 1][(int)(all->pos->po.x / 16)]);
 	while (i < bottomofwall)
 	{
 		if (all->hitV){
@@ -126,6 +202,7 @@ void	affichminimap(t_cub *all, int ch)
 	int	y;
 	all->node = NULL;
 	checkplayer(all, ch);
+	ft_checkdoor(all);
 	x = all->pscreenx - 64;
 	y = all->pscreeny - 64;
 	all->distancexx = x;

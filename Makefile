@@ -6,7 +6,7 @@
 #    By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/13 14:45:57 by ygbouri           #+#    #+#              #
-#    Updated: 2022/10/03 15:25:04 by momayaz          ###   ########.fr        #
+#    Updated: 2022/10/09 15:22:28 by momayaz          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,6 +34,10 @@ all : $(NAME)
 $(NAME) : $(OBJ) $(HEADER)
 	@$(CC)  $(SRC) -lmlx $(MLX) -o $(NAME) -g
 	@echo "mandatory is done"
+
+bonus : $(OBJ) $(HEADER)
+	@$(CC)  $(SRC) -lmlx $(MLX) -o $(NAME) -g
+	@echo "bonus is done"
 
 clean :
 	@rm -rf $(OBJ)

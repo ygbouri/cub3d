@@ -6,7 +6,7 @@
 /*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/10/06 14:25:16 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/10 09:38:05 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,16 @@
 
 int lh;
 
+
+typedef struct s_sprite
+{
+	double x;
+	double y;
+	double dist;
+	double angle;
+	int tex_x;
+}				t_sprite;
+
 typedef struct  s_text
 {
 	void *img;
@@ -51,6 +61,8 @@ typedef struct s_info
 	char			*s1;
 	unsigned int	cc;
 	unsigned int	fc;
+	int 			mapheight;
+	int 			mapwidth;
 	int				test[256];
 }
 					t_info;
@@ -167,6 +179,7 @@ typedef struct s_cub
 	int 			imgH;
 	bool			door;
 	int				l7aj;
+	t_sprite		sprit[4];
 }	t_cub;
 
 
@@ -291,6 +304,8 @@ void	fovminimap(t_cub *all);
 int	ft_strleny(char **str);
 int	ft_mouse(int x, int y, t_cub *game);
 void	calcTuxter(t_cub *all);
+int	ft_abs(int value);
+void	ft_checkdoor(t_cub *all);
 int	checkdoor_ray(t_cub *all, double xr, double yr);
 //void	init_gl(t_glpos *gl, t_cub *all);
 #endif

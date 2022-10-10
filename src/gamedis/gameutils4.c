@@ -6,7 +6,7 @@
 /*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:45:40 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/06 15:49:32 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/10 09:17:05 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@ void	paintplayer(t_cub *all, int ch)
 	(void)ch;
 	i = 0;
 	tmp = all->node;
-///	while (i < 10)
-	//{
-	//	j = 0;
-	//	while (j < 10)
-	//	{
+	while (i < 10)
+	{
+		j = 0;
+		while (j < 10)
+		{
 			my_mlx_pixel_put(all->img, 64, 64, 0xFD1700);
-	//		j++;
-	//	}
-	//	i++;
-	//}
+			j++;
+		}
+		i++;
+	}
 	while (tmp->next)
 	{
 		
@@ -57,7 +57,7 @@ int	checkwall(t_cub *all)
 		return (0);
 	if (x < 0 && x > x_line)
 		return (0);
-	if (all->map[y][x] == '1' || all->map[y][x] == ' ' || all->map[y][x] == 0)
+	if (all->map[y][x] == '1' || all->map[y][x] == ' ' || all->map[y][x] == 0 || all->map[y][x] == 'D')
 	{
 		return (0);
 	}

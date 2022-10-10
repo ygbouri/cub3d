@@ -6,7 +6,7 @@
 /*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:45:44 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/04 17:44:49 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/09 17:37:24 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,20 @@ int	ft_mouse(int x, int y, t_cub *game)
 	pos = x;
     moveplayer(game);
 	return (y);
+}
+
+void initSprite(t_cub *all)
+{
+	all->sprit[0].x = 640;
+	all->sprit[0].y = 630;
+	all->sprit[0].tex_x = 9;
+	all->sprit[1].x = 2;
+	all->sprit[1].y = 8;
+	all->sprit[1].tex_x = 9;
+	all->sprit[2].x = 8;
+	all->sprit[2].y = 8;
+	all->sprit[2].tex_x = 10;
+	all->sprit[3].x = 8;
+	all->sprit[3].y = 2;
+	all->sprit[3].tex_x = 11;
 }
