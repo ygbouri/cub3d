@@ -133,6 +133,7 @@ void	chosedistance(t_cub *all, t_glpos *glpos)
 	else 
 		glpos->hori_d = 1e30;
 	
+	//all->ray->distvertihit = glpos->verti_d;
 	if (glpos->hori_d < glpos->verti_d)
 	{
 		glpos->po.x = glpos->hori.x ;

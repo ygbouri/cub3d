@@ -33,11 +33,24 @@ int lh;
 
 typedef struct s_sprite
 {
-	double x;
-	double y;
-	double dist;
-	double angle;
-	int tex_x;
+	double x; //x position in map
+	double y; //y position in map
+	double screenx; //x position on screen
+	double screeny; //y position on screen
+	double dist; //distance from player
+	double angle; //angle between player and sprite
+	int tex_x; //tuxture number
+	int visible; //is sprite visible
+	double spritrheight; //sprite height on screen
+	double spritewidth; //sprite width on screen
+	double spritetopy; //sprite top y on screen
+	double spriteboty; //sprite bottom y on screen
+	double spritxpos; //sprite x position on screen
+	double spriteleftx; //sprite left x on screen
+	double spriterightx; //sprite right x on screen
+	double spritangle; //sprite angle
+	int texturewidth; //sprite texture width
+	int textureheight; //sprite texture height
 }				t_sprite;
 
 typedef struct  s_text
@@ -103,6 +116,7 @@ typedef struct rays
 	bool				updirect;
 	bool				leftdirect;
 	bool				rightdirect;
+	double 			 distvertihit;
 }					t_rays;
 
 typedef struct drawrays
@@ -154,6 +168,7 @@ typedef struct s_cub
 	int				k;
 	double			pscreenx;
 	double			pscreeny;
+	double 			distoprojectionplane;
 	double 			minix;
 	double 			miniy;
 	char			P;
@@ -171,7 +186,7 @@ typedef struct s_cub
 	t_drawrays		*node;
 	t_glpos			*pos;
 	unsigned int	*wallTxt;
-	t_text			texture[6];
+	t_text			texture[7];
 	bool			hitV;
 	int				imgW;
 	float			oldplanex;
@@ -179,7 +194,8 @@ typedef struct s_cub
 	int 			imgH;
 	bool			door;
 	int				l7aj;
-	t_sprite		sprit[4];
+	t_sprite		*sprite;
+	int				spritecount;
 }	t_cub;
 
 
@@ -223,40 +239,7 @@ void			check_m(t_cub *a);
 void			check_charm(t_cub *a, char c);
 int				ft_isdigit(char c);
 void			if_digit(char *s);
-
-/*************************************************/
-void			*ft_memset(void *s, int c, size_t n);
-void			replace_nl_with_null(char *str);
-void			free_parsing(t_cub *parsing);
-int				check_file_name(char *str);
-int				skip_spaces(char *tmpline);
-int				assign_floor(t_cub *parsing, int i);
-int				assign_ceiling(t_cub *parsing, int i);
-int				assign_vars_two(t_cub *parsing, int i);
-int				assign_vars_three(t_cub *parsing, int i);
-int				assign_vars(t_cub *parsing);
-void			init_parsing(t_cub *parsing, char *argv[]);
-void			parsing_directions_colors_two(t_cub *parsing);
-int				parsing_directions_colors(t_cub *parsing, \
-		char *argv[], int argc);
-int				skip_newlines(t_cub *parsing);
-void			parse_map(t_cub *parsing, size_t i);
-int				check_fist_last_line(t_cub *parsing);
-int				check_first_indexes(t_cub *parsing);
 int				check_map(t_cub *parsing, int i, int j);
-void			parse_map_assign_two(t_cub *parsing, size_t *i);
-void			parse_map_assign(t_cub *parsing, size_t i);
-void			replace_spc_wall(t_cub *parsing);
-int				search_for_player(t_cub *parsing, int i, int j, int count);
-int				search_for_player2(t_cub *parsing, int i, int j, int count);
-void			ft_bzero(void *s, size_t n);
-void			*ft_memmove(void *dest, const void *src, size_t n);
-int				contains_newline(char const *s1);
-char			*first_line(char *str);
-char			*second_part(char *str);
-char			*get_next_line(int fd);
-int				check_colors(char *str);
-void			main_parse(int ac, char **av, t_cub *parsing, int mode);
 int				ft_error(char *str);
 /***************************************************************/
 
@@ -304,8 +287,13 @@ void	fovminimap(t_cub *all);
 int	ft_strleny(char **str);
 int	ft_mouse(int x, int y, t_cub *game);
 void	calcTuxter(t_cub *all);
-int	ft_abs(int value);
-void	ft_checkdoor(t_cub *all);
+float	ft_abs(float value);
+void	ft_checkdoor(char **map, float x, float y);
 int	checkdoor_ray(t_cub *all, double xr, double yr);
 //void	init_gl(t_glpos *gl, t_cub *all);
+void allocsprit(t_cub *all);
+int calculspritenumber(t_cub *all);
+void ifspritevisible(t_cub *all, int k);
+void randringsprite(t_cub *all);
+void locateSprite(t_cub *all);
 #endif

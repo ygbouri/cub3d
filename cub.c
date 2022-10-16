@@ -51,7 +51,7 @@ void	calcTuxter(t_cub *all){
 		exit(1);
 	}
 	all->texture[4].data = (unsigned int*) mlx_get_data_addr(all->texture[4].img, &all->img->bits_per_pixel, &info.line_length, &info.endian);
-	all->texture[5].img = mlx_xpm_file_to_image(all->mlx, "./box_64x64.xpm", &all->texture[5].w, &all->texture[5].h);
+	all->texture[5].img = mlx_xpm_file_to_image(all->mlx, "./pics/1.xpm", &all->texture[5].w, &all->texture[5].h);
 	if (!all->texture[5].img)
 		{
 		printf("5");
@@ -160,5 +160,9 @@ int main(int ac, char **av)
 	all.checker = 0;
 	all.ray = (t_rays *)malloc(sizeof(t_rays));
 	big_parss(ac, av, &all, 'b');
+	all.spritecount = calculspritenumber(&all);
+	all.sprite = malloc(sizeof(t_sprite) * all.spritecount);
+	locateSprite(&all);
 	ft_display(&all);
+
 }

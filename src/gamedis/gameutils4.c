@@ -57,7 +57,7 @@ int	checkwall(t_cub *all)
 		return (0);
 	if (x < 0 && x > x_line)
 		return (0);
-	if (all->map[y][x] == '1' || all->map[y][x] == ' ' || all->map[y][x] == 0 || all->map[y][x] == 'D')
+	if (all->map[y][x] == '1' || all->map[y][x] == ' ' || all->map[y][x] == 0 || all->map[y][x] == 'F')
 	{
 		return (0);
 	}

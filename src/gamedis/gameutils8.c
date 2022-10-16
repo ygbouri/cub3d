@@ -32,62 +32,34 @@ void getmapwidth(t_cub *all)
 	all->info.mapwidth = i;
 }
 
-int	ft_abs(int value)
+float	ft_abs(float value)
 {
 	if (value < 0)
 		return (-value);
-	printf("door found\n");
 	return (value);
 }
 
-void ft_findplayer(char **map, int *x, int *y)
-{
-	int i;
-	int j;
 
-	i = 0;
-	while (map[i])
-	{
-		j = 0;
-		while (map[i][j])
-		{
-			if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E' || map[i][j] == 'W')
-			{
-				*x = j;
-				*y = i;
-				return ;
-			}
-			j++;
-		}
-		i++;
-	}
-}
-
-void	ft_checkdoor(t_cub *all)
+void	ft_checkdoor(char **map, float x, float y)
 {
 	int	i;
 	int	j;
-	int x, y;
-	
-	ft_findplayer(all->map, &x, &y);
+
 	i = -1;
-	while (all->map[++i])
+	while (map[++i])
 	{
 		j = -1;
-		while (all->map[i][++j])
-		{
-			if (all->map[i][j] == 'D' && (ft_abs(i - x) <= 2 || ft_abs(j - y) <= 2))
+		while (map[i][++j])
+		{	
+			if (map[i][j] == 'D' && (ft_abs(i - y) < 2 && ft_abs(j - x) < 2))
 			{
-				all->map[i][j] = 'O';
+				map[i][j] = 'O';
 			}
-			if (all->map[i][j] == 'O' && (ft_abs(i - x) >= 3 || ft_abs(j - y) >= 3))
-				all->map[i][j] = 'D';
+			if (map[i][j] == 'O' && (ft_abs(i - y) >= 2 || ft_abs(j - x) >= 2))
+				map[i][j] = 'D';
 		}
 	}
 }
-
-//check if player is front of a door and open it and close it
-
 
 
 void	paintceiling(t_cub *all, int top)
@@ -121,14 +93,13 @@ void	renderthreeD(t_cub *all)
 	int		topofwall;
 	int		bottomofwall;
 	double	correctdistance;
-	double	distoprojectionplane;
 	double	wallheight;
 
 	i = 0;
 	correctdistance = 0;
 	correctdistance = all->ray->distance * cos(all->ray->rayangle - all->p->rotationangl);
-	distoprojectionplane = (W / 2.0) / tan(all->ray->fovangle / 2.0);
-	wallheight = (16 / correctdistance) * distoprojectionplane;
+	all->distoprojectionplane = (W / 2) / tan(all->ray->fovangle / 2);
+	wallheight = (16 / correctdistance) * all->distoprojectionplane;
 	wallstripheight = (int)wallheight;
 	topofwall = (H / 2.0) - (wallstripheight / 2.0);
 	bottomofwall = (H / 2.0) + (wallstripheight / 2.0);
@@ -184,6 +155,7 @@ void	fovminimap(t_cub *all)
 	initialrayvar(all);
 	//all->compteur = 0;
 	calcTuxter(all);
+	ft_checkdoor(all->map, all->posx / 16, all->posy / 16);
 	while (all->ray->colid < all->ray->numrays)
 	{
 		hintercept(all, all->ray->rayangle, &glpos);
@@ -202,7 +174,6 @@ void	affichminimap(t_cub *all, int ch)
 	int	y;
 	all->node = NULL;
 	checkplayer(all, ch);
-	ft_checkdoor(all);
 	x = all->pscreenx - 64;
 	y = all->pscreeny - 64;
 	all->distancexx = x;
@@ -217,5 +188,8 @@ void	affichminimap(t_cub *all, int ch)
 	fovminimap(all);
 	paintmap(all, all->img, ch);
 	paintplayer(all, ch);
+	randringsprite(all);
 	mlx_put_image_to_window(all->mlx, all->mlx_win, all->img->img, 0, 0);
 }
+
+

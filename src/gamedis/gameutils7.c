@@ -69,6 +69,7 @@ void	paintmap(t_cub *all, t_data *img, int ch)
 	int		y;
 	int		i;
 	int		j;
+	int 	s;
 
 	i = 0;
 	j = 0;
@@ -77,6 +78,7 @@ void	paintmap(t_cub *all, t_data *img, int ch)
 	y = all->pscreeny - 64;
 	(void)ch;
 	pixelmap(img, 0xff000);
+	ifspritevisible(all, all->spritecount);
 	while (all->map[i])
 	{
 		j = 0;
@@ -88,6 +90,23 @@ void	paintmap(t_cub *all, t_data *img, int ch)
 				pixelcarre(all, 16, img, (int)all->info.cc);
 			if (all->map[i][j] == 'D')
 				pixelcarre(all, 16, img, 0x125AFF);
+			if (all->map[i][j] == 'F')
+			{
+				s = 0;
+				while (s < all->spritecount)
+				{
+					if ((int)floor(all->sprite[s].x)  == i && (int)floor(all->sprite[s].y) == j)
+					{
+						if (all->sprite[s].visible)
+							pixelcarre(all, 16, img, 0x00ffff);
+						else
+							pixelcarre(all, 16, img, 0x0000FF);
+					}
+					s++;
+			}
+
+			}
+				
 			j++;
 		}
 		i++;
