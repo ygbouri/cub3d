@@ -6,58 +6,11 @@
 /*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 16:02:01 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/06 16:17:38 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/17 18:38:42 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
-
-void	initialiserinter(t_glpos *gl)
-{
-	gl->intercept.x = 0;
-	gl->intercept.y = 0;
-	gl->player.x = 0;
-	gl->player.y = 0;
-	gl->step.x = 0;
-	gl->step.y = 0;
-	gl->po.x = 0;
-	gl->po.y = 0;
-	gl->hori.x = 0;
-	gl->hori.y = 0;
-	gl->verti.x = 0;
-	gl->verti.y = 0;
-	gl->nbr = 0;
-	gl->hori_d = 0;
-	gl->verti_d = 0;
-	gl->hori_f = false;
- 	gl->verti_f = false;
-}
-
-void	calculhoridis(t_cub *all, t_glpos *glpos, int len)
-{
-	while ((((int)(glpos->intercept.y / 16) >= 0) 
-			&& (int)(glpos->intercept.y / 16) < len) 
-			&& ((int)(glpos->intercept.x / 16) >= 0) 
-			&& ((int)(glpos->intercept.x / 16) < (int)ft_strlen(all->map[(int)glpos->intercept.y / 16]) * 16))
-	{
-		glpos->nbr = glpos->intercept.y;
-		if (all->ray->updirect)
-			glpos->nbr--;
-		if (checkwall_ray(all, glpos->intercept.x, glpos->nbr))
-		{
-			glpos->hori_f = false;
-			glpos->intercept.x += glpos->step.x;
-			glpos->intercept.y += glpos->step.y;
-		}
-		else
-		{
-			glpos->hori_f = true;
-			glpos->hori.x = glpos->intercept.x;
-			glpos->hori.y = glpos->intercept.y;
-			break;
-		}
-	}
-}
 
 void	intercephori(t_cub *all, t_glpos *glpos, double angle, int len)
 {
@@ -133,7 +86,6 @@ void	chosedistance(t_cub *all, t_glpos *glpos)
 	else 
 		glpos->hori_d = 1e30;
 	
-	//all->ray->distvertihit = glpos->verti_d;
 	if (glpos->hori_d < glpos->verti_d)
 	{
 		glpos->po.x = glpos->hori.x ;
@@ -141,6 +93,7 @@ void	chosedistance(t_cub *all, t_glpos *glpos)
 		all->ray->distance = glpos->hori_d;
 		all->hitV = false;
 		glpos->verti_f = false;
+		all->raydist[all->hitindex] = glpos->hori_d;
 	}
 	else
 	{
@@ -149,7 +102,9 @@ void	chosedistance(t_cub *all, t_glpos *glpos)
 		all->ray->distance = glpos->verti_d;
 		all->hitV = true;
 		glpos->hori_f = false;
+		all->raydist[all->hitindex] = glpos->verti_d;
 	}
+	all->hitindex++;
 }
 
 void	hintercept(t_cub *all, double angle, t_glpos *glpos)

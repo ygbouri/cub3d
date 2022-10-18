@@ -6,7 +6,7 @@
 /*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/10/10 09:38:05 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/17 18:44:40 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,8 +194,12 @@ typedef struct s_cub
 	int 			imgH;
 	bool			door;
 	int				l7aj;
+	float			raydist[W];
+	int				hitindex;
 	t_sprite		*sprite;
 	int				spritecount;
+	t_text 			spriteimg[15];
+	int 			st;
 }	t_cub;
 
 
@@ -274,7 +278,7 @@ void	updat_data(t_cub **all);
 void	freenode(t_cub *all);
 void	paintmap(t_cub *all, t_data *img, int ch);
 void	conserveangle(t_cub *all);
-double	calculdistance(double x, double y, double a, double b);
+double	calculdistance(double x1, double y1, double x2, double y2);
 void	raydirection(t_cub *all);
 int	checkwall_ray(t_cub *all, double xr, double yr);
 void	hintercept(t_cub *all, double angle, t_glpos *glpos);
@@ -295,5 +299,17 @@ void allocsprit(t_cub *all);
 int calculspritenumber(t_cub *all);
 void ifspritevisible(t_cub *all, int k);
 void randringsprite(t_cub *all);
+void	spriteimginit(t_cub *all);
+void	spriteimginit1(t_cub *all);
+void	spriteimginit2(t_cub *all);
+void	ft_frame(t_cub *all);
+void drawing(t_cub *all, int i, int x);
+void randering(t_cub *all, int i);
+void   sorting_sprites(t_cub *all);
+void getwaltex(t_cub *all);
+void paintwalltex(t_cub *all, int i, int bottomofwall, double wallheight);
+void paintmap1(t_cub *all, int i, int j, t_data *img);
+void	calculhoridis(t_cub *all, t_glpos *glpos, int len);
+void	initialiserinter(t_glpos *gl);
 void locateSprite(t_cub *all);
 #endif

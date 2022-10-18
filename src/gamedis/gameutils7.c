@@ -6,7 +6,7 @@
 /*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:45:21 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/06 15:14:06 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/17 18:24:24 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	freenode(t_cub *all)
 int	moveplayer(t_cub *all)
 {
 	updat_data(&all);
+	ft_frame(all);
 	mlx_clear_window(all->mlx, all->mlx_win);
 	mlx_destroy_image(all->mlx, all->img->img);
 	freenode(all);
@@ -69,7 +70,6 @@ void	paintmap(t_cub *all, t_data *img, int ch)
 	int		y;
 	int		i;
 	int		j;
-	int 	s;
 
 	i = 0;
 	j = 0;
@@ -86,26 +86,7 @@ void	paintmap(t_cub *all, t_data *img, int ch)
 		while(all->map[i][j] && all->map[i][j] != '\n')
 		{
 			all->minix = 16 * j - x;
-			if (all->map[i][j] == '1')
-				pixelcarre(all, 16, img, (int)all->info.cc);
-			if (all->map[i][j] == 'D')
-				pixelcarre(all, 16, img, 0x125AFF);
-			if (all->map[i][j] == 'F')
-			{
-				s = 0;
-				while (s < all->spritecount)
-				{
-					if ((int)floor(all->sprite[s].x)  == i && (int)floor(all->sprite[s].y) == j)
-					{
-						if (all->sprite[s].visible)
-							pixelcarre(all, 16, img, 0x00ffff);
-						else
-							pixelcarre(all, 16, img, 0x0000FF);
-					}
-					s++;
-			}
-
-			}
+			paintmap1(all, i, j, img);
 				
 			j++;
 		}

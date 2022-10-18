@@ -6,7 +6,7 @@
 /*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 15:57:21 by momayaz           #+#    #+#             */
-/*   Updated: 2022/10/09 15:31:29 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/18 09:56:54 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,49 +15,26 @@
 void	calcTuxter(t_cub *all){
 	t_data info;
 	
-
-
 	all->texture[0].img = mlx_xpm_file_to_image(all->mlx, all->info.n, &all->texture[0].w, &all->texture[0].h);
-	if (!all->texture[0].img){
-		printf("0");
+	if (!all->texture[0].img)
 		exit(1);
-	}
 	all->texture[0].data = (unsigned int*) mlx_get_data_addr(all->texture[0].img, &all->img->bits_per_pixel, &info.line_length, &info.endian);
 	all->texture[1].img = mlx_xpm_file_to_image(all->mlx, all->info.s, &all->texture[1].w, &all->texture[1].h);
 	if (!all->texture[1].img)
-		{
-		printf("1");
 		exit(1);
-	}
 	all->texture[1].data = (unsigned int*) mlx_get_data_addr(all->texture[1].img, &all->img->bits_per_pixel, &info.line_length, &info.endian);
 	all->texture[2].img = mlx_xpm_file_to_image(all->mlx, all->info.e, &all->texture[2].w, &all->texture[2].h);
 	if (!all->texture[2].img)
-		{
-		printf("2");
 		exit(1);
-	}
 	all->texture[2].data = (unsigned int*) mlx_get_data_addr(all->texture[2].img, &all->img->bits_per_pixel, &info.line_length, &info.endian);
 	all->texture[3].img = mlx_xpm_file_to_image(all->mlx, all->info.w, &all->texture[3].w, &all->texture[3].h);
 	if (!all->texture[3].img)
-		{
-		printf("3");
 		exit(1);
-	}
 	all->texture[3].data = (unsigned int*) mlx_get_data_addr(all->texture[3].img, &all->img->bits_per_pixel, &info.line_length, &info.endian);
-	all->texture[4].img = mlx_xpm_file_to_image(all->mlx, "./images_64x64.xpm", &all->texture[4].w, &all->texture[4].h);
+	all->texture[4].img = mlx_xpm_file_to_image(all->mlx, "./pics/images_64x64.xpm", &all->texture[4].w, &all->texture[4].h);
 	if (!all->texture[4].img)
-		{
-		printf("4");
 		exit(1);
-	}
 	all->texture[4].data = (unsigned int*) mlx_get_data_addr(all->texture[4].img, &all->img->bits_per_pixel, &info.line_length, &info.endian);
-	all->texture[5].img = mlx_xpm_file_to_image(all->mlx, "./pics/1.xpm", &all->texture[5].w, &all->texture[5].h);
-	if (!all->texture[5].img)
-		{
-		printf("5");
-		exit(1);
-	}
-	all->texture[5].data = (unsigned int*) mlx_get_data_addr(all->texture[5].img, &all->img->bits_per_pixel, &info.line_length, &info.endian);
 }
 
 
@@ -162,6 +139,7 @@ int main(int ac, char **av)
 	big_parss(ac, av, &all, 'b');
 	all.spritecount = calculspritenumber(&all);
 	all.sprite = malloc(sizeof(t_sprite) * all.spritecount);
+	all.st = -1;
 	locateSprite(&all);
 	ft_display(&all);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gameutils9.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:56:43 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/02 12:56:56 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/10/17 18:35:30 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,52 @@ void	initialrayvar(t_cub *all)
 	all->ray->updirect = false;
 	all->ray->leftdirect = false;
 	all->ray->rightdirect = false;
+}
+
+void	fovminimap(t_cub *all)
+{
+	double 		inc_angle;
+	t_glpos		glpos;
+
+	inc_angle = all->ray->fovangle / W;
+	//init_gl(&glpos, all);
+	initialrayvar(all);
+	//all->compteur = 0;
+	calcTuxter(all);
+	ft_checkdoor(all->map, all->posx / 16, all->posy / 16);
+	all->hitindex = 0;
+	while (all->ray->colid < all->ray->numrays)
+	{
+		hintercept(all, all->ray->rayangle, &glpos);
+		renderthreeD(all);
+		all->ray->rayangle += inc_angle;
+		all->ray->colid++;
+		//all->compteur += 1;
+	}
+	//printf("rays %d compteur%d\n", all->ray->numrays,all->ray->colid);
+}
+
+
+void	affichminimap(t_cub *all, int ch)
+{
+	int	x;
+	int	y;
+	all->node = NULL;
+	checkplayer(all, ch);
+	x = all->pscreenx - 64;
+	y = all->pscreeny - 64;
+	all->distancexx = x;
+	all->distanceyy = y;
+	all->posx = all->pscreenx;
+	all->posy = all->pscreeny;
+	if(ch == 0)
+	{
+		all->p = iniatialiserp(all);
+		detectang(all);
+	}
+	fovminimap(all);
+	paintmap(all, all->img, ch);
+	paintplayer(all, ch);
+	randringsprite(all);
+	mlx_put_image_to_window(all->mlx, all->mlx_win, all->img->img, 0, 0);
 }

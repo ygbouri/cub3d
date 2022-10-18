@@ -6,7 +6,7 @@
 /*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:35:34 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/10 09:34:11 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/17 18:39:00 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	ft_display(t_cub *all)
 	all->img = (t_data *)malloc(sizeof(t_data));
 	all->mlx = mlx_init();
 	all->mlx_win = mlx_new_window(all->mlx, W, H, "CUB3D");
+	all->hitindex = 0;
 	drawimg(all, 0);
 	mlx_hook(all->mlx_win, 3, 1L<<1, keyrelease, all);
 	mlx_hook(all->mlx_win, 2, 1L<<0, keypressed, all);

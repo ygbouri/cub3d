@@ -19,9 +19,9 @@ void	conserveangle(t_cub *all)
 		all->ray->rayangle += (2 * M_PI);
 }
 
-double	calculdistance(double x, double y, double a, double b)
+double	calculdistance(double x1, double y1, double x2, double y2)
 {
-	return (sqrt(pow((a - x), 2) + pow((b - y), 2)));
+	return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
 }
 
 void	raydirection(t_cub *all)
