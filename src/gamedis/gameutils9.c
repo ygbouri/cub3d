@@ -6,13 +6,13 @@
 /*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:56:43 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/17 18:35:30 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/19 12:35:07 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
 
-t_drawrays *lstnew(double x, double y, double a, double b)
+t_drawrays	*lstnew(double x, double y, double a, double b)
 {
 	t_drawrays	*element;
 
@@ -64,32 +64,28 @@ void	initialrayvar(t_cub *all)
 
 void	fovminimap(t_cub *all)
 {
-	double 		inc_angle;
-	t_glpos		glpos;
+	double	inc_angle;
+	t_glpos	glpos;
 
 	inc_angle = all->ray->fovangle / W;
-	//init_gl(&glpos, all);
 	initialrayvar(all);
-	//all->compteur = 0;
-	calcTuxter(all);
+	calctuxter(all);
 	ft_checkdoor(all->map, all->posx / 16, all->posy / 16);
 	all->hitindex = 0;
 	while (all->ray->colid < all->ray->numrays)
 	{
 		hintercept(all, all->ray->rayangle, &glpos);
-		renderthreeD(all);
+		renderthreed(all);
 		all->ray->rayangle += inc_angle;
 		all->ray->colid++;
-		//all->compteur += 1;
 	}
-	//printf("rays %d compteur%d\n", all->ray->numrays,all->ray->colid);
 }
-
 
 void	affichminimap(t_cub *all, int ch)
 {
 	int	x;
 	int	y;
+
 	all->node = NULL;
 	checkplayer(all, ch);
 	x = all->pscreenx - 64;
@@ -98,7 +94,7 @@ void	affichminimap(t_cub *all, int ch)
 	all->distanceyy = y;
 	all->posx = all->pscreenx;
 	all->posy = all->pscreeny;
-	if(ch == 0)
+	if (ch == 0)
 	{
 		all->p = iniatialiserp(all);
 		detectang(all);

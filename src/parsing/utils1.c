@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 16:10:03 by momayaz           #+#    #+#             */
-/*   Updated: 2022/09/13 15:31:54 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/10/18 12:51:26 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,11 @@ int	ft_atoi(char *nptr)
 {
 	int	a;
 	int	b;
+	int	i;
 
 	a = 0;
 	b = 1;
+	i = -1;
 	if_digit(nptr);
 	while ((*nptr >= 9 && *nptr <= 13) || *nptr == 32)
 		ft_error("rgb error\n");

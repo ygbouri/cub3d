@@ -6,7 +6,7 @@
 /*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/10/17 18:44:40 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/20 14:54:17 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,39 +28,44 @@
 # define TEX_HE 64
 # define TAIL 64
 
-int lh;
-
-
 typedef struct s_sprite
 {
-	double x; //x position in map
-	double y; //y position in map
-	double screenx; //x position on screen
-	double screeny; //y position on screen
-	double dist; //distance from player
-	double angle; //angle between player and sprite
-	int tex_x; //tuxture number
-	int visible; //is sprite visible
-	double spritrheight; //sprite height on screen
-	double spritewidth; //sprite width on screen
-	double spritetopy; //sprite top y on screen
-	double spriteboty; //sprite bottom y on screen
-	double spritxpos; //sprite x position on screen
-	double spriteleftx; //sprite left x on screen
-	double spriterightx; //sprite right x on screen
-	double spritangle; //sprite angle
-	int texturewidth; //sprite texture width
-	int textureheight; //sprite texture height
+	double	x;
+	double	y;
+	double	screenx;
+	double	screeny;
+	double	dist;
+	double	angle;
+	int		tex_x;
+	int		visible;
+	double	spritrheight;
+	double	spritewidth;
+	double	spritetopy;
+	double	spriteboty;
+	double	spritxpos;
+	double	spriteleftx;
+	double	spriterightx;
+	double	spritangle;
+	int		texturewidth;
+	int		textureheight;
 }				t_sprite;
 
-typedef struct  s_text
+typedef struct s_norm
 {
-	void *img;
-	unsigned int *data;
-	int w;
-	int h;
-}   t_text;
+	float	x;
+	float	y;
+	float	incx;
+	float	incy;
+	int		step;
+}	t_norm;
 
+typedef struct s_text
+{
+	void			*i;
+	unsigned int	*data;
+	int				w;
+	int				h;
+}	t_text;
 
 typedef struct s_info
 {
@@ -74,12 +79,11 @@ typedef struct s_info
 	char			*s1;
 	unsigned int	cc;
 	unsigned int	fc;
-	int 			mapheight;
-	int 			mapwidth;
+	int				mapheight;
+	int				mapwidth;
 	int				test[256];
-}
-					t_info;
-typedef struct	s_data {
+}	t_info;
+typedef struct s_data {
 	void	*img;
 	char	*addr;
 	int		bits_per_pixel;
@@ -87,43 +91,43 @@ typedef struct	s_data {
 	int		endian;
 }				t_data;
 
-typedef struct  player
+typedef struct player
 {
 	int		xp;
 	int		yp;
 	int		radius;
 	int		checker;
-	int		turnDirection;
-	int		walkDirectionx;
-	int		walkDirectiony;
+	int		turndirection;
+	int		walkdirectionx;
+	int		walkdirectiony;
 	double	rotationangl;
 	float	movespeed;
 	float	movestep;
 	float	rotationspeed;
-}				t_player;
+}	t_player;
 
 typedef struct rays
 {
-	double			fovangle;
-	int				wallstrip;
-	int				numrays;
-	double			rayangle;
-	int				colid;
-	double			wallhitx;
-	double			wallhity;
-	double			distance;
-	bool				downdirect;
-	bool				updirect;
-	bool				leftdirect;
-	bool				rightdirect;
-	double 			 distvertihit;
+	double	fovangle;
+	int		wallstrip;
+	int		numrays;
+	double	rayangle;
+	int		colid;
+	double	wallhitx;
+	double	wallhity;
+	double	distance;
+	bool	downdirect;
+	bool	updirect;
+	bool	leftdirect;
+	bool	rightdirect;
+	double	distvertihit;
 }					t_rays;
 
 typedef struct drawrays
 {
 	double			departx;
 	double			departy;
-	double			finx; 
+	double			finx;
 	double			finy;
 	struct drawrays	*next;
 }				t_drawrays;
@@ -142,11 +146,11 @@ typedef struct glpos
 	t_pos	po;
 	t_pos	hori;
 	t_pos	verti;
-	double 	hori_d;
-	double 	verti_d;
-	double 	nbr;
-	bool hori_f; 
-	bool verti_f;
+	double	hori_d;
+	double	verti_d;
+	double	nbr;
+	bool	hori_f;
+	bool	verti_f;
 }				t_glpos;
 
 typedef struct s_cub
@@ -168,10 +172,10 @@ typedef struct s_cub
 	int				k;
 	double			pscreenx;
 	double			pscreeny;
-	double 			distoprojectionplane;
-	double 			minix;
-	double 			miniy;
-	char			P;
+	double			distoprojectionplane;
+	double			minix;
+	double			miniy;
+	char			pp;
 	float			dirx;
 	float			diry;
 	int				checker;
@@ -185,25 +189,22 @@ typedef struct s_cub
 	t_rays			*ray;
 	t_drawrays		*node;
 	t_glpos			*pos;
-	unsigned int	*wallTxt;
 	t_text			texture[7];
-	bool			hitV;
-	int				imgW;
+	bool			hitv;
 	float			oldplanex;
 	float			olddirx;
-	int 			imgH;
 	bool			door;
 	int				l7aj;
 	float			raydist[W];
 	int				hitindex;
 	t_sprite		*sprite;
 	int				spritecount;
-	t_text 			spriteimg[15];
-	int 			st;
+	t_text			spriteimg[15];
+	int				st;
+	t_drawrays		*tmp;
+	t_norm			*norm;
+	float			margin;
 }	t_cub;
-
-
-
 
 /*************************************************/
 
@@ -247,69 +248,74 @@ int				check_map(t_cub *parsing, int i, int j);
 int				ft_error(char *str);
 /***************************************************************/
 
-void		ft_display(t_cub *all);
-void		my_mlx_pixel_put(t_data *data, int x, int y, int color);
-void		affichminimap(t_cub *all, int ch);
-void		pixelcarre(t_cub *all, int pi, t_data *img, int color);
-void		raycasting(t_cub *all);
-int			keyrelease(int key, t_cub *all);
-int			keypressed(int key, t_cub *all);
-int			moveplayer(t_cub *all);
-int			closewin(int key, t_cub *all);
-void		drawingray(t_cub *all, double x0, double y0, double x1, double y1);
-t_drawrays 	*lstnew(double x, double y, double a, double b);
-void		lstaddback(t_drawrays **header, t_drawrays *new);
-void		drawimg(t_cub *all, int ch);
-void		pixelmap(t_data *img, int color);
-int	checkplayer(t_cub *all, int ch);
-t_player	*iniatialiserp(t_cub *all);
-void	detectang(t_cub *all);
-
-void	drawingline(t_cub *all);
- void	paintplayer(t_cub *all, int ch);
-int	checkwall(t_cub *all);
-void	moveleft(t_cub *all);
-void	moveright(t_cub *all);
-void	moveup(t_cub *all);
-void	movedown(t_cub *all);
-void	moveraytleft(t_cub *all);
-void	moveraytright(t_cub *all);
-void	updat_data(t_cub **all);
-void	freenode(t_cub *all);
-void	paintmap(t_cub *all, t_data *img, int ch);
-void	conserveangle(t_cub *all);
-double	calculdistance(double x1, double y1, double x2, double y2);
-void	raydirection(t_cub *all);
-int	checkwall_ray(t_cub *all, double xr, double yr);
-void	hintercept(t_cub *all, double angle, t_glpos *glpos);
-t_drawrays *lstnew(double x, double y, double a, double b);
-void	initialrayvar(t_cub *all);
-void	paintceiling(t_cub *all, int top);
-void	paintfloor(t_cub *all, int bottom);
-void	renderthreeD(t_cub *all);
-void	fovminimap(t_cub *all);
-int	ft_strleny(char **str);
-int	ft_mouse(int x, int y, t_cub *game);
-void	calcTuxter(t_cub *all);
-float	ft_abs(float value);
-void	ft_checkdoor(char **map, float x, float y);
-int	checkdoor_ray(t_cub *all, double xr, double yr);
-//void	init_gl(t_glpos *gl, t_cub *all);
-void allocsprit(t_cub *all);
-int calculspritenumber(t_cub *all);
-void ifspritevisible(t_cub *all, int k);
-void randringsprite(t_cub *all);
-void	spriteimginit(t_cub *all);
-void	spriteimginit1(t_cub *all);
-void	spriteimginit2(t_cub *all);
-void	ft_frame(t_cub *all);
-void drawing(t_cub *all, int i, int x);
-void randering(t_cub *all, int i);
-void   sorting_sprites(t_cub *all);
-void getwaltex(t_cub *all);
-void paintwalltex(t_cub *all, int i, int bottomofwall, double wallheight);
-void paintmap1(t_cub *all, int i, int j, t_data *img);
-void	calculhoridis(t_cub *all, t_glpos *glpos, int len);
-void	initialiserinter(t_glpos *gl);
-void locateSprite(t_cub *all);
+void			ft_display(t_cub *all);
+void			my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void			affichminimap(t_cub *all, int ch);
+void			pixelcarre(t_cub *all, int pi, t_data *img, int color);
+void			raycasting(t_cub *all);
+int				keyrelease(int key, t_cub *all);
+int				keypressed(int key, t_cub *all);
+int				moveplayer(t_cub *all);
+int				closewin(int key, t_cub *all);
+void			drawingray(t_cub *all);
+t_drawrays		*lstnew(double x, double y, double a, double b);
+void			lstaddback(t_drawrays **header, t_drawrays *new);
+void			drawimg(t_cub *all, int ch);
+void			pixelmap(t_data *img, int color);
+int				checkplayer(t_cub *all, int ch);
+t_player		*iniatialiserp(t_cub *all);
+void			detectang(t_cub *all);
+void			drawingline(t_cub *all);
+void			paintplayer(t_cub *all, int ch);
+int				checkwall(t_cub *all);
+void			moveleft(t_cub *all);
+void			moveright(t_cub *all);
+void			moveup(t_cub *all);
+void			movedown(t_cub *all);
+void			moveraytleft(t_cub *all);
+void			moveraytright(t_cub *all);
+void			updat_data(t_cub **all);
+void			freenode(t_cub *all);
+void			paintmap(t_cub *all, t_data *img, int ch);
+void			conserveangle(t_cub *all);
+double			calculdistance(double x1, double y1, double x2, double y2);
+void			raydirection(t_cub *all);
+int				checkwall_ray(t_cub *all, double xr, double yr);
+void			hintercept(t_cub *all, double angle, t_glpos *glpos);
+t_drawrays		*lstnew(double x, double y, double a, double b);
+void			initialrayvar(t_cub *all);
+void			paintceiling(t_cub *all, int top);
+void			paintfloor(t_cub *all, int bottom);
+void			renderthreed(t_cub *all);
+void			fovminimap(t_cub *all);
+int				ft_strleny(char **str);
+int				ft_mouse(int x, int y, t_cub *game);
+void			calctuxter(t_cub *all);
+float			ft_abs(float value);
+void			ft_checkdoor(char **map, float x, float y);
+int				checkdoor_ray(t_cub *all, double xr, double yr);
+void			allocsprit(t_cub *all);
+int				calculspritenumber(t_cub *all);
+void			ifspritevisible(t_cub *all, int k);
+void			randringsprite(t_cub *all);
+void			spriteimginit(t_cub *all);
+void			spriteimginit1(t_cub *all);
+void			spriteimginit2(t_cub *all);
+void			ft_frame(t_cub *all);
+void			drawing(t_cub *all, int i, int x);
+void			randering(t_cub *all, int i);
+void			sorting_sprites(t_cub *all);
+void			getwaltex(t_cub *all);
+void			paintwalltex(t_cub *all, int i, int botfwall, double wallh);
+void			paintmap1(t_cub *all, int i, int j, t_data *img);
+void			calculhoridis(t_cub *all, t_glpos *glpos, int len);
+void			initialiserinter(t_glpos *gl);
+void			calctuxter1(t_cub *all, t_data *info);
+void			chosedistance2(t_cub *all, t_glpos *glpos);
+void			fillplayer(t_cub *all);
+void			norm1(t_cub *all);
+void			norm2(t_cub *all);
+void			norm3(t_cub *all);
+void			freealoc(t_cub *all);
+void			locatesprite(t_cub *all);
 #endif

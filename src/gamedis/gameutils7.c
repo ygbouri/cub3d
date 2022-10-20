@@ -6,7 +6,7 @@
 /*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:45:21 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/17 18:24:24 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/19 11:51:25 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 int	keypressed(int key, t_cub *all)
 {
 	if (key == 124)
-		all->p->turnDirection = 1;
+		all->p->turndirection = 1;
 	else if (key == 123)
-		all->p->turnDirection = -1;
+		all->p->turndirection = -1;
 	if (key == 0)
-		all->p->walkDirectionx = -1;
+		all->p->walkdirectionx = -1;
 	else if (key == 2)
-	 	all->p->walkDirectionx = 1;
+		all->p->walkdirectionx = 1;
 	else if (key == 1)
-		all->p->walkDirectiony = -1;
+		all->p->walkdirectiony = -1;
 	else if (key == 13)
-		all->p->walkDirectiony = 1;
+		all->p->walkdirectiony = 1;
 	else if (key == 53)
 	{
 		printf("Game is finish\n");
@@ -83,11 +83,10 @@ void	paintmap(t_cub *all, t_data *img, int ch)
 	{
 		j = 0;
 		all->miniy = 16 * i - y;
-		while(all->map[i][j] && all->map[i][j] != '\n')
+		while (all->map[i][j] && all->map[i][j] != '\n')
 		{
 			all->minix = 16 * j - x;
 			paintmap1(all, i, j, img);
-				
 			j++;
 		}
 		i++;

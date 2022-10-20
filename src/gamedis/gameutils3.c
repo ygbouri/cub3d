@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gameutils3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
+/*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:36:00 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/02 12:41:38 by ygbouri          ###   ########.fr       */
+/*   Updated: 2022/10/18 22:11:52 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,30 +35,24 @@ int	checkplayer(t_cub *all, int ch)
 {
 	if (ch == 0)
 	{
-		all->w = 0;
 		all->h = 0;
-		all->xp = 0;
-		all->yp = 0;
-		while (all->map[all->yp])
+		all->yp = -1;
+		while (all->map[++all->yp])
 		{
-			all->xp = 0;
+			all->xp = -1;
 			all->w = 0;
-			while (all->map[all->yp][all->xp])
+			while (all->map[all->yp][++all->xp])
 			{
 				if (all->map[all->yp][all->xp] == 'N'
 					|| all->map[all->yp][all->xp] == 'S'
 					|| all->map[all->yp][all->xp] == 'W'
 					|| all->map[all->yp][all->xp] == 'E')
 				{
-					all->P = all->map[all->yp][all->xp];
-					all->pscreenx = all->w + 8;
-					all->pscreeny = all->h + 8;
+					fillplayer(all);
 					return (1);
 				}
 				all->w += 16;
-				all->xp++;
 			}
-			all->yp++;
 			all->h += 16;
 		}
 	}
@@ -70,9 +64,9 @@ t_player	*iniatialiserp(t_cub *all)
 	t_player	*p;
 
 	p = (t_player *) malloc(sizeof(t_player));
-	p->walkDirectionx = 0;
-	p->walkDirectiony = 0;
-	p->turnDirection = 0;
+	p->walkdirectionx = 0;
+	p->walkdirectiony = 0;
+	p->turndirection = 0;
 	p->movespeed = 2.0;
 	p->movestep = 0.0;
 	p->radius = 0;
@@ -86,11 +80,11 @@ t_player	*iniatialiserp(t_cub *all)
 
 void	detectang(t_cub *all)
 {
-	if (all->P == 'N')
+	if (all->pp == 'N')
 		all->p->rotationangl = M_PI_2;
-	else if (all->P == 'S')
-		all->p->rotationangl = M_PI * 3/2;
-	else if (all->P == 'W')
+	else if (all->pp == 'S')
+		all->p->rotationangl = M_PI * 3 / 2;
+	else if (all->pp == 'W')
 		all->p->rotationangl = M_PI;
 	else
 		all->p->rotationangl = 0;
@@ -101,28 +95,24 @@ void	drawingline(t_cub *all)
 	int		dx;
 	int		dy;
 	int		i;
-	float	x;
-	float	y;
-	float	incx;
-	float	incy;
-	int		step;
 
 	i = 0;
 	dx = all->dirx - all->xp;
 	dy = all->diry - all->yp;
 	if (abs(dx) > abs(dy))
-		step = abs(dx);
+		all->norm->step = abs(dx);
 	else
-		step = abs(dy);
-	incx = dx / (float)step;
-	incy = dy / (float)step;
-	x = (float)64;
-	y = (float)64;
-	while (i < step)
+		all->norm->step = abs(dy);
+	all->norm->incx = dx / (float)all->norm->step;
+	all->norm->incy = dy / (float)all->norm->step;
+	all->norm->x = (float)64;
+	all->norm->y = (float)64;
+	while (i < all->norm->step)
 	{
-		my_mlx_pixel_put(all->img, round(x), round(y), 0x0D1700);
-		x += incx;
-		y += incy;
+		my_mlx_pixel_put(all->img, round(all->norm->x),
+			round(all->norm->y), 0x0D1700);
+		all->norm->x += all->norm->incx;
+		all->norm->y += all->norm->incy;
 		i++;
 	}
 }

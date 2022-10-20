@@ -6,15 +6,15 @@
 /*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:54:05 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/17 18:36:49 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/19 11:52:16 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
 
-void getmapheight(t_cub *all)
+void	getmapheight(t_cub *all)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (all->map[i])
@@ -22,9 +22,9 @@ void getmapheight(t_cub *all)
 	all->info.mapheight = i;
 }
 
-void getmapwidth(t_cub *all)
+void	getmapwidth(t_cub *all)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (all->map[0][i])
@@ -38,7 +38,6 @@ float	ft_abs(float value)
 		return (-value);
 	return (value);
 }
-
 
 void	ft_checkdoor(char **map, float x, float y)
 {
@@ -61,7 +60,6 @@ void	ft_checkdoor(char **map, float x, float y)
 	}
 }
 
-
 void	paintceiling(t_cub *all, int top)
 {
 	int	i;
@@ -73,9 +71,3 @@ void	paintceiling(t_cub *all, int top)
 		i++;
 	}
 }
-
-
-
-
-
-

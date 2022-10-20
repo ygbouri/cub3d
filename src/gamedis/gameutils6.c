@@ -6,7 +6,7 @@
 /*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:45:47 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/06 16:02:00 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/19 10:58:14 by momayaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	conserveangle(t_cub *all)
 
 double	calculdistance(double x1, double y1, double x2, double y2)
 {
-	return sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+	return (sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)));
 }
 
 void	raydirection(t_cub *all)
@@ -30,39 +30,37 @@ void	raydirection(t_cub *all)
 		all->ray->downdirect = 1;
 	else
 		all->ray->updirect = 1;
-	if ((all->ray->rayangle < (0.5 * M_PI)) || (all->ray->rayangle > (1.5 * M_PI)))
+	if ((all->ray->rayangle < (0.5 * M_PI))
+		|| (all->ray->rayangle > (1.5 * M_PI)))
 		all->ray->rightdirect = 1;
 	else
 		all->ray->leftdirect = 1;
 }
 
-void	drawingray(t_cub *all, double x0, double y0, double x1, double y1)
+void	drawingray(t_cub *all)
 {
-	int		dx;
-	int		dy;
+	int		d[2];
 	int		i;
 	int		step;
-	float	x;
-	float	y;
-	float	incx;
-	float	incy;
+	float	x[2];
+	float	inc[2];
 
 	i = 0;
-	dx = x1 - x0 ;
-	dy = y1 - y0;
-	if (abs(dx) > abs(dy))
-		step = abs(dx);
+	d[0] = all->tmp->finx - all->tmp->departx ;
+	d[1] = all->tmp->finy - all->tmp->departy;
+	if (abs(d[0]) > abs(d[1]))
+		step = abs(d[0]);
 	else
-		step = abs(dy);
-	incx = (float)dx / (float)step;
-	incy = (float)dy / (float)step;
-	x = x0;
-	y = y0;
-	while (i < step && x <= 128 && y <= 128)
+		step = abs(d[1]);
+	inc[0] = (float)d[0] / (float)step;
+	inc[1] = (float)d[1] / (float)step;
+	x[0] = all->tmp->departx;
+	x[1] = all->tmp->departy;
+	while (i < step && x[0] <= 128 && x[1] <= 128)
 	{
-		my_mlx_pixel_put(all->img, floor(x), floor(y),0xeb4034);
-		x += incx;
-		y += incy;
+		my_mlx_pixel_put(all->img, floor(x[0]), floor(x[1]), 0xeb4034);
+		x[0] += inc[0];
+		x[1] += inc[1];
 		i++;
 	}
 }
@@ -83,7 +81,8 @@ int	checkwall_ray(t_cub *all, double xr, double yr)
 		return (0);
 	if (x < 0 && x > x_line)
 		return (0);
-	if (all->map[y][x] == '1' || all->map[y][x] == ' ' || all->map[y][x] == 0 || all->map[y][x] == 'D')
+	if (all->map[y][x] == '1' || all->map[y][x] == ' '
+		|| all->map[y][x] == 0 || all->map[y][x] == 'D')
 	{
 		return (0);
 	}
