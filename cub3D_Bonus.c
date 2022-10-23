@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D_Bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 14:49:59 by momayaz           #+#    #+#             */
-/*   Updated: 2022/10/20 15:06:04 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/20 18:31:06 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	main(int ac, char **av)
 	while (i < 256)
 		all.info.test[i++] = 0;
 	all.checker = 0;
+	all.game_mode = 'b';
 	all.ray = (t_rays *)malloc(sizeof(t_rays));
 	big_parss(ac, av, &all, 'b');
 	all.spritecount = calculspritenumber(&all);

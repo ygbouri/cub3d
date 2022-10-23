@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 12:14:40 by izouf             #+#    #+#             */
-/*   Updated: 2022/10/20 14:54:17 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/21 10:00:47 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,6 +204,7 @@ typedef struct s_cub
 	t_drawrays		*tmp;
 	t_norm			*norm;
 	float			margin;
+	char			game_mode;
 }	t_cub;
 
 /*************************************************/

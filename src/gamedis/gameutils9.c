@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gameutils9.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:56:43 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/19 12:35:07 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/23 18:11:18 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,11 @@ void	affichminimap(t_cub *all, int ch)
 		detectang(all);
 	}
 	fovminimap(all);
-	paintmap(all, all->img, ch);
-	paintplayer(all, ch);
+	if (all->game_mode == 'b')
+	{
+		paintmap(all, all->img, ch);
+		paintplayer(all, ch);
+	}
 	randringsprite(all);
 	mlx_put_image_to_window(all->mlx, all->mlx_win, all->img->img, 0, 0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gameutils1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: momayaz <momayaz@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ygbouri <ygbouri@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/02 12:35:34 by ygbouri           #+#    #+#             */
-/*   Updated: 2022/10/18 18:46:23 by momayaz          ###   ########.fr       */
+/*   Updated: 2022/10/20 18:34:33 by ygbouri          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ void	ft_display(t_cub *all)
 	mlx_hook(all->mlx_win, 2, 1L << 0, keypressed, all);
 	mlx_hook(all->mlx_win, 17, 0, closewin, all);
 	mlx_loop_hook(all->mlx, moveplayer, all);
-	mlx_hook(all->mlx_win, 6, 0, ft_mouse, all);
+	if (all->game_mode == 'b')
+		mlx_hook(all->mlx_win, 6, 0, ft_mouse, all);
 	mlx_loop(all->mlx);
 }
 
